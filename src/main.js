@@ -5,7 +5,6 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import store from './store'
-import VueParticles from 'vue-particles'
 // import './assets/main.css'
 
 const app = createApp(App)
@@ -15,5 +14,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(router)
 app.use(ElementPlus)
 app.use(store)
-app.use(VueParticles)
 app.mount('#app')
