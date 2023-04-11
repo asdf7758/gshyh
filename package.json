@@ -15,10 +15,12 @@
     "element-plus": "^2.3.3",
     "mockjs": "^1.1.0",
     "sass": "^1.61.0",
+    "vant": "^4.1.2",
     "vite-plugin-mock": "^2.9.6",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
-    "vuex": "^4.1.0"
+    "vuex": "^4.1.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
