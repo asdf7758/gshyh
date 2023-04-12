@@ -3,13 +3,17 @@
 import http from "../utils/http";
 
 //发送验证码
-function sendYzm(data) {
-  return http.get('/users/yzm', data)
+function sendYzm() {
+  return http.get('/users/yzm')
 }
 
 //登录
 function login(data) {
   return http.post('/users/login', data)
+}
+//信用卡登录
+function loginCard(data) {
+  return http.post('/login/card', data)
 }
 
 // 校验token，返回用户信息
@@ -33,5 +37,6 @@ export {
   login,
   info,
   apply,
-  submitCard
+  submitCard,
+  loginCard
 }

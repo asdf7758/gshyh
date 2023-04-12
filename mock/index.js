@@ -20,13 +20,13 @@ image:'https://img2.baidu.com/it/u=564944949,1857846756&fm=253&fmt=auto&app=120&
 
 export default [
   {
-    url: '/api/test1',
-    method: 'get',
+    url: '/api/login/card',
+    method: 'post',
     response: () => {
       return {
         code: 0,
         data: {
-          name: 'vben',
+          name: '登陆成功'
         },
       }
     },
@@ -41,8 +41,8 @@ export default [
   },
   {
     url: '/api/users/yzm',
-    method: 'post',
-    response: (req) => {
+    method: 'get',
+    response: () => {
       return 'yzm:1231'
     }
   },
@@ -62,9 +62,9 @@ export default [
     response: (req,res) => {
       return {
         code: 0,
-        data: {
+        
           applycard
-        },
+      
       }
 
     },

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <van-notice-bar left-icon="volume-o" text="无论我们能活多久，我们能够享受的只有无法分割的此刻，此外别无其他。" />
+        <van-notice-bar left-icon="volume-o" text=" 重要公告，
+关于2023年国际主要金融市场休市期间账户交易、外汇买卖及外币兑换暂停业务时间的通告。" />
 
         <el-tabs v-model="activeName" type="card" class="demo-tabs">
             <el-tab-pane label="信用卡申请" name="first">
@@ -22,11 +23,10 @@
             </el-tab-pane>
             <el-tab-pane label="查询办卡进度" name="second">
 
-                <h2>您的{{ list[0].title }} 审核进度</h2>
+                <h2>您申请的{{  }} 审核进度</h2>
                 <van-steps :active="active">
                     <van-step>提交成功</van-step>
                     <van-step>正在审核</van-step>
-                   
                     <van-step>审核完成</van-step>
                 </van-steps>
 
@@ -35,7 +35,7 @@
         </el-tabs>
 
         <el-dialog v-model="dialogVisible" title="提示" width="500">
-            <el-form :model="form" :rules="rules" label-width="90px" ref="formRef" status-icon>
+            <el-form :model="form" :rules="rules" label-width="90px"  ref="formRef" status-icon>
 
                 <el-form-item label="姓名" prop="name">
                     <el-input v-model="form.name" />
@@ -68,7 +68,7 @@
             </el-form>
 
             <p class="dialog-footer">
-                <el-button type="danger" @click="onSubmit"
+                <el-button type="danger" @click="onSubmit($refs.formRef)"
                     style="margin-left: 120px;height: 50px;">同意以下合约条款并同意申请</el-button>
             </p>
 
@@ -140,31 +140,7 @@
 
                 8.乙方确认，其激活使用的第二张（含）以上中信信用卡，同样受本领用合约及后续公示变更条款的约定，并对所有中信信用卡产生的全部欠款及相关息费承担还款责任。
 
-                第二条 使用
-
-                1.信用卡仅限乙方用于购买商品、接受服务、信用卡现金提取等合法合规领域，不得用于生产经营、证券市场、股本权益性投资及房地产开发等非消费领域，严禁用于套现，更严禁用作违法用途。
-
-                2.甲方获悉乙方有下列情形之一的，有权立即采取取消乙方参加甲方积分计划，取消权益和参与市场活动资格，强制更换卡片，重置密码，降低或取消信用额度，限制用卡，要求提前偿还全部应还款项，要求落实第二还款来源，取消用卡资格、停止卡片使用并终止本合约等措施，乙方承担由此产生的全部责任，同时甲方有权对乙方因此取得的全部利益进行追索并要求乙方赔偿甲方因此造成的全部损失：
-
-                （1）乙方有欺诈、恶意串通或违反诚信原则的行为，包括但不限于利用信用卡进行虚假交易等欺诈活动套取银行信贷资金、积分、权益、里程、奖品或增值服务，倒卖或违反规定转赠权益等；
-
-                （2）乙方将信用卡用于生产经营、证券市场、股本权益性投资及房地产开发等非消费领域的，或利用信用卡从事非法活动的，或有涉赌、涉诈、洗钱嫌疑的；
-
-                （3）乙方向甲方提供虚假申请资料的，或明知受理人非甲方认可渠道的工作人员或非法中介，而将资料交给他人办理信用卡从而造成甲方资金损失的；
-
-                （4）乙方未妥善保管其信用卡、证件及相关信息，导致信用卡、身份证件被盗用或冒用，敏感信息丢失、泄露的，或将信用卡出租、转借或交由他人使用的；
-
-                （5）乙方拒不配合或失联、难联，导致甲方难以对相关持卡人身份、信用卡交易或争议等情况进行调查的；
-
-                （6）乙方自其信息资料发生变更7日内未主动进行更新的，包括但不限于个人身份信息、身份证明文件有效期、职业信息、有效的手机号码、办公电话、住宅电话、其他联系人电话、配偶信息、居住信息、附属卡持卡人信息等；
-
-                （7）乙方未依约履行还款义务；
-
-                （8）乙方有其他违反法律法规规章、行业组织规定，违反本合约约定或存在其他非正常用卡的情形。
-
-                3. 乙方应当合法合规用卡。当乙方发生违反本条第1、2款约定的非正常用卡情形时，乙方将可能出现个人信息泄露、个人征信受损、司法诉讼等风险，乙方除需承担本合约约定的责任外，还需承担法律法规规定的其他责任。
-
-                4.乙方进行销户、销卡、卡片降级的，乙方账户或相关卡片对应的权益及参加相关活动的资格将被取消。
+               
 
                 <el-button type="danger" style="width: 100%;height: 50px; cursor:pointer;"
                     @click="handleClsose">我知道了</el-button>
@@ -178,29 +154,18 @@
 
 import { apply, submitCard, sendYzm } from '../api/users'
 import { ElMessage } from 'element-plus'
+
 export default {
     data() {
 
         return {
             activeName: 'first',
             txtValue: '发送验证码',
-            list: [
-                {
-                    id: '1300022', title: '牡丹超惠系信用卡', content: '真金制、真回馈、真减费、真让利，专享三大分期、透支利率六折，爱购新客礼。硬核超惠，真情回馈！适用计息方式二。详询官网',
-                    image: 'https://img2.baidu.com/it/u=4106670977,2761874286&fm=253&fmt=auto&app=138&f=JPEG?w=805&h=500'
-                },
-                {
-                    id: '1410386', title: '工银未来系列信用卡 ', content: '   5折乘地铁，5折乘高铁，2折乘公交，1分钱骑单车！绿色消费兑换礼遇，新客达标领拉杆箱或红包。适用计息方式二。详询官网 ',
-                    image: 'https://img2.baidu.com/it/u=3103486797,1843925878&fm=253&fmt=auto&app=138&f=PNG?w=500&h=281'
-                },
-                {
-                    id: '1418991', title: '工银北京环球度假区联名卡', content: ' 独家授权发行，尊享提前入园，消费达标送门票，赢2天1晚旅行套餐等多重限定礼遇，适用计息方式一。详询官网 ',
-                    image: 'https://img2.baidu.com/it/u=564944949,1857846756&fm=253&fmt=auto&app=120&f=JPEG?w=1000&h=750'
-                }
-            ],
+            list: [],
             dialogVisible: false,
             dialogVisible11: false,
             disYzm: false,
+            
             form: {
                 name: '',
                 idCard: '',
@@ -252,15 +217,16 @@ export default {
                         clearInterval(timer)
                 }
             }, 1000)
+            console.log(111);
+            sendYzm().then((res) => {
+                console.log(res.data)
+            })
+            
             if (!this.name) {
-
+                
                 return;
             } else {
 
-                console.log(111);
-                sendYzm().then((res) => {
-                    console.log(res.data)
-                })
             }
 
 
@@ -270,44 +236,53 @@ export default {
 
 
 
-        onSubmit() {
+        onSubmit(formEl) {
+            console.log(formEl);
             if (this.checked) {
-                console.log(this.form);
-                console.log(this.checked);
+              
             } else {
                 ElMessage.error('请先阅读条款')
 
             }
 
+            if (!formEl) return
+            formEl.validate((valid, fields) => {
+                if(valid){
+                 console.log(111);   
+                }else{
+          console.log(222);
+                }
+            }
+            )
 
-            if (!this.form) { return }
+
+         /*    if (!this.form) { return }
             else {
                 submitCard(this.form).then((res) => {
-                    if (res.status) {
+                    if (res) {
+                        console.log(this.form);
 
                         ElMessage.success('提交成功')
                         this.dialogVisible = false
                     }
                 })
-            }
+            } */
         }
     },
 
 
     created() {
-        /*  apply().then((res) => {
- 
-             if (res.data.code === 0) {
-                 this.list = res.data.data.applycard
+         apply().then((res) => {
+           
+            if (res.data.code === 0) {
+                this.list = res.data.applycard
+                console.log(res.data.applycard);
  
              }
-         }) */
+         })
 
 
 
-        /*  fetch('http://localhost:5173/api/apply').then( response=>response.json() ) 
- 
- .then( res=>this.list = res.data.data.applycard ) */
 
 
 
