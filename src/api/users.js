@@ -17,14 +17,21 @@ function login(data) {
 function info() {
   return http.get('/users/info')
 }
-//申请信用卡信息
+//申请信用卡类型信息
 function apply() {              
-  return http.get('/apply/card')
+  return http.get('/apply')
 }
+
+//提交信用卡信息
+function submitCard() {              
+  return http.post('/submit/card')
+}
+
 
 export {
   sendYzm,
   login,
   info,
-  apply
+  apply,
+  submitCard
 }

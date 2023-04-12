@@ -9,6 +9,7 @@ const instance = axios.create({
   // 添加请求拦截器->携带用户身份token
   instance.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
+    /* config.headers = { 'Access-Control-Allow-Origin': '*' } */
      //设置请求头信息，每个instance发起的请求都会携带用户的信息
    /*  config.headers.token=store.state.users.token */ //把token挂载到请求头上
     return config;

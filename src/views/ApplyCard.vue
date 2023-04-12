@@ -1,6 +1,8 @@
 <template>
     <div>
-        <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
+        <van-notice-bar left-icon="volume-o" text="无论我们能活多久，我们能够享受的只有无法分割的此刻，此外别无其他。" />
+
+        <el-tabs v-model="activeName" type="card" class="demo-tabs">
             <el-tab-pane label="信用卡申请" name="first">
 
                 <ul style="list-style: none;margin-left: 200px;">
@@ -18,9 +20,20 @@
 
 
             </el-tab-pane>
-            <el-tab-pane label="查询办卡进度" name="second">查询办卡进度</el-tab-pane>
+            <el-tab-pane label="查询办卡进度" name="second">
+
+                <h2>您的{{ list[0].title }} 审核进度</h2>
+                <van-steps :active="active">
+                    <van-step>提交成功</van-step>
+                    <van-step>正在审核</van-step>
+                   
+                    <van-step>审核完成</van-step>
+                </van-steps>
+
+            </el-tab-pane>
             <el-tab-pane label="查询换卡进度" name="third">查询换卡进度</el-tab-pane>
         </el-tabs>
+
         <el-dialog v-model="dialogVisible" title="提示" width="500">
             <el-form :model="form" :rules="rules" label-width="90px" ref="formRef" status-icon>
 
@@ -36,18 +49,30 @@
                     <el-input v-model="form.telePhone" />
                 </el-form-item>
 
+
                 <el-form-item label="验证码" prop="yzm">
-                    <el-input v-model="form.yzm" />
+                    <el-row>
+                        <el-col :span="16">
+                            <el-input class="yzm-content" v-model="form.yzm" />
+                        </el-col>
+                        <el-col :span="8">
+                            <el-button class="yzm-button" @click="handleSendYzm" :disabled="disYzm">
+                                {{ txtValue }}</el-button>
+                        </el-col>
+                    </el-row>
                 </el-form-item>
+
+
+
 
             </el-form>
 
             <p class="dialog-footer">
-                <el-button type="danger" @click="onSubmit(formRef)"
+                <el-button type="danger" @click="onSubmit"
                     style="margin-left: 120px;height: 50px;">同意以下合约条款并同意申请</el-button>
             </p>
 
-            <input type="checkbox" v-model="checked" />本人已阅读清楚知晓 <span style="color: blue;"
+            <input type="checkbox" v-model="checked" />本人已阅读清楚知晓 <span style="color: blue; cursor:pointer;"
                 @click="handleDetail">《工商银行信用卡（个人卡）领用合约》
                 《个人资信信息（含个人信用信息）处理授权书》涉及电信网络新型违法犯罪合约法律责任及防范提示告知书 </span>
             <p>该信用卡的相关信息，愿意遵守合约条款的各项规则。
@@ -61,7 +86,7 @@
 
 
         </el-dialog>
-        <el-dialog v-model="dialogVisible11" title="提示" width="500" style="position: relative;overflow: scroll;">
+        <el-dialog v-model="dialogVisible11" title="提示" width="500">
             <p>
                 中信银行信用卡（个人卡）领用合约
                 （信银卡字[2023]31号）
@@ -141,32 +166,49 @@
 
                 4.乙方进行销户、销卡、卡片降级的，乙方账户或相关卡片对应的权益及参加相关活动的资格将被取消。
 
-                <el-button type="danger"
-                    style="width: 100%;height: 50px;position: absolute;bottom: 0;left: 0;">我知道了</el-button>
+                <el-button type="danger" style="width: 100%;height: 50px; cursor:pointer;"
+                    @click="handleClsose">我知道了</el-button>
             </p>
-        </el-dialog>>
+        </el-dialog>
 
     </div>
 </template>
 
 <script>
-import { apply } from '../api/users'
+
+import { apply, submitCard, sendYzm } from '../api/users'
 import { ElMessage } from 'element-plus'
 export default {
     data() {
 
         return {
             activeName: 'first',
-            list: [],
-            dialogVisible: 'false',
-            dialogVisible11: 'false',
-            formRef:[],
-            form: ({
+            txtValue: '发送验证码',
+            list: [
+                {
+                    id: '1300022', title: '牡丹超惠系信用卡', content: '真金制、真回馈、真减费、真让利，专享三大分期、透支利率六折，爱购新客礼。硬核超惠，真情回馈！适用计息方式二。详询官网',
+                    image: 'https://img2.baidu.com/it/u=4106670977,2761874286&fm=253&fmt=auto&app=138&f=JPEG?w=805&h=500'
+                },
+                {
+                    id: '1410386', title: '工银未来系列信用卡 ', content: '   5折乘地铁，5折乘高铁，2折乘公交，1分钱骑单车！绿色消费兑换礼遇，新客达标领拉杆箱或红包。适用计息方式二。详询官网 ',
+                    image: 'https://img2.baidu.com/it/u=3103486797,1843925878&fm=253&fmt=auto&app=138&f=PNG?w=500&h=281'
+                },
+                {
+                    id: '1418991', title: '工银北京环球度假区联名卡', content: ' 独家授权发行，尊享提前入园，消费达标送门票，赢2天1晚旅行套餐等多重限定礼遇，适用计息方式一。详询官网 ',
+                    image: 'https://img2.baidu.com/it/u=564944949,1857846756&fm=253&fmt=auto&app=120&f=JPEG?w=1000&h=750'
+                }
+            ],
+            dialogVisible: false,
+            dialogVisible11: false,
+            disYzm: false,
+            form: {
                 name: '',
                 idCard: '',
                 telePhone: '',
                 yzm: '',
-            }),
+
+
+            },
             checked: '',
             rules: {
                 name: [
@@ -177,10 +219,11 @@ export default {
                 ],
                 telePhone: [
                     { required: true, message: '电话不能为空', trigger: 'blur' },
-                    { pattern: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/, message: '请输入正确的手机号', trigger: 'blur' }
+                   /*  { pattern: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/, message: '请输入正确的手机号', trigger: 'blur' } */
                 ],
                 yzm: [
                     { required: true, message: '验证码不能为空', trigger: 'blur' },
+                    { min: 4, max: 4, message: '四位验证码', trigger: 'blur' },
                 ],
 
             }
@@ -189,46 +232,84 @@ export default {
 
     methods: {
         showInput() {
-            this.dialogVisible = 'true'
+            this.dialogVisible = true
         },
         handleDetail() {
-            this.dialogVisible11 = 'true'
+            this.dialogVisible11 = true
         },
-        onSubmit(form) {
-            if (this.checked) {
-                console.log(form); 
-                console.log(this.checked);
+        handleClsose() {
+            this.dialogVisible11 = false
+        },
+        handleSendYzm() {
+            let count = 10
+            this.disYzm = true;
+            const timer = setInterval(() => {
+                count--
+                this.txtValue = `${count}秒后可再次发送`
+                if (count === 0) {
+                    this.disYzm = false;
+                    this.txtValue = '发送验证码',
+                        clearInterval(timer)
+                }
+            }, 1000)
+            if (!this.name) {
+
+                return;
             } else {
-                ElMessage.error('请先阅读条款')
+
+                console.log(111);
+                sendYzm().then((res) => {
+                    console.log(res.data)
+                })
             }
 
 
-            if (!form) return
-            formEl.validate((valid) => {
-                if (valid) {
-                    console.log('submit!')
-                } else {
-                    console.log('error submit!')
-                    return false
-                }
-            })
+        },
+
+
+
+
+
+        onSubmit() {
+            if (this.checked) {
+                console.log(this.form);
+                console.log(this.checked);
+            } else {
+                ElMessage.error('请先阅读条款')
+
+            }
+
+
+            if (!this.form) { return }
+            else {
+                submitCard(this.form).then((res) => {
+                    if (res.status) {
+
+                        ElMessage.success('提交成功')
+                        this.dialogVisible = false
+                    }
+                })
+            }
         }
     },
 
 
     created() {
-        /*   apply().then((res)=>{
-              console.log(res);
-          }) */
-        fetch('http://127.0.0.1:5173/api/apply/card').then(response => response.json())
-            .then(res => {
-                console.log(res)
+        /*  apply().then((res) => {
+ 
+             if (res.data.code === 0) {
+                 this.list = res.data.data.applycard
+ 
+             }
+         }) */
 
-                if (res.code === 0) {
-                    this.list = res.data.applycard
-                    console.log(this.list);
-                }
-            })
+
+
+        /*  fetch('http://localhost:5173/api/apply').then( response=>response.json() ) 
+ 
+ .then( res=>this.list = res.data.data.applycard ) */
+
+
 
     }
 }
@@ -243,5 +324,4 @@ export default {
 
 .el-tabs__item {
     background: #c7000b !important
-}
-</style>
+}</style>
