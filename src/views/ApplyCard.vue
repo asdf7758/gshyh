@@ -1,10 +1,31 @@
 <template>
     <div>
-        <van-notice-bar left-icon="volume-o" text=" 重要公告，
-关于2023年国际主要金融市场休市期间账户交易、外汇买卖及外币兑换暂停业务时间的通告。" />
+        <div>
+            <img src="../img/未标题-1.png" alt="" style="vertical-align:middle">
+            <img src="../img/未标题-2.png" alt="" style="vertical-align:top">
+
+            <span style="float:right">
+                <el-space>
+
+                    <el-tag class="ml-2" type="danger">万丰银行首页 </el-tag>
+                    <el-tag class="ml-2" type="danger">使用指南 </el-tag>
+                    <el-tag class="ml-2" type="danger">在线客服 </el-tag>
+                </el-space>
+
+                <p style="margin-right: 20px;font-size: 20px;font-style: italic;font-weight: bold;">
+                    服务热线：400-1431-3423-342323</p>
+            </span>
+            <span>
+
+            </span>
+
+        </div>
+
 
         <el-tabs v-model="activeName" type="card" class="demo-tabs">
             <el-tab-pane label="信用卡申请" name="first">
+                <!--    <van-notice-bar left-icon="volume-o" text=" 重要公告，
+关于2023年国际主要金融市场休市期间账户交易、外汇买卖及外币兑换暂停业务时间的通告。" /> -->
 
                 <ul style="list-style: none;margin-left: 200px;">
 
@@ -23,7 +44,7 @@
             </el-tab-pane>
             <el-tab-pane label="查询办卡进度" name="second">
 
-                <h2>您申请的{{  }} 审核进度</h2>
+                <h2>您申请的 审核进度</h2>
                 <van-steps :active="active">
                     <van-step>提交成功</van-step>
                     <van-step>正在审核</van-step>
@@ -31,11 +52,89 @@
                 </van-steps>
 
             </el-tab-pane>
-            <el-tab-pane label="查询换卡进度" name="third">查询换卡进度</el-tab-pane>
+            
+            <el-tab-pane label="我的信用卡" name="four">
+
+
+
+                <p> <el-icon style="color=blue ">
+                        <ChatLineSquare />
+                    </el-icon> 信用额度 </p>
+
+                <p>
+                    可用额度 <b> ￥{{ greditList.money }} </b> <el-button type="primary" @click="handleCota(11)">申请额度
+                        <el-dialog v-model="dialogVisible33" width="300">
+
+                            <el-form :model="formCota" :rules="rules2" label-width="" ref="formRef2" status-icon>
+                                <el-form-item label="" prop="summoney">
+                                    <el-input v-model="formCota.summoney" placeholder="请输入申请金额" style="width: 220px; " />
+                                </el-form-item>
+
+                                
+                                <el-button type="primary" @click="handleSubmitCode($refs.formRef2)" style="width: 200px;margin-top: 20px;   "> 提交 </el-button>
+
+
+                            </el-form>
+
+                        </el-dialog>
+
+
+                    </el-button>
+                </p>
+                <hr>
+                <ul>
+                    <li v-for="item, index in greditList.billsearch" :key="item.id" style="border-bottom: 1px solid  #ccc;width: 700px;"> 
+                 <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;">  待还金额：{{ item.meta }}   </span>
+                 <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;">  还款日： {{ item.date }}  </span>
+                 <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 最低还款：{{ item.zdMeta }}   </span>
+               <el-button type="primary" @click="handleGredit(index)">立即还款 </el-button> 
+
+                    </li>
+
+                    <el-dialog v-model="dialogVisible22" width="300">
+                        <h3 style="text-align: center;">还款金额</h3>
+                        <el-form :model="formStill" :rules="rules1" label-width="" ref="formRef1" status-icon>
+                            <el-form-item label="" prop="sum">
+                                <el-input v-model="formStill.sum" placeholder="请输入还款金额" style="width: 220px; " />
+                            </el-form-item>
+
+                            
+                            <el-form-item label="">
+                                <el-select v-model="formStill.type" placeholder="请选择支付方式"  prop="type">
+                                    <el-option label="微信" value="微信" />
+                                    <el-option label="支付宝" value="支付宝" />
+                                    <el-option label="工商银行" value="工商银行" />
+                                    <el-option label="中国银行" value="中国银行" />
+                                    <el-option label="建设银行" value="建设银行" />
+                                </el-select>
+
+                                <el-form-item label="" prop="password">
+                                <el-input v-model="formStill.password" placeholder="请输入密码" style="width: 220px; " />
+                            </el-form-item>
+
+                                <el-button type="primary" @click="handleSubmitStill($refs.formRef1)"
+                                style="width: 200px;margin-top: 20px;">立即还款</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
+
+                </ul>
+
+
+
+
+
+
+
+
+            </el-tab-pane>
+            <el-tab-pane label="历史账单" name="five">
+
+            </el-tab-pane>
         </el-tabs>
 
         <el-dialog v-model="dialogVisible" title="提示" width="500">
-            <el-form :model="form" :rules="rules" label-width="90px"  ref="formRef" status-icon>
+            <el-form :model="form" :rules="rules" label-width="90px" ref="formRef" status-icon>
 
                 <el-form-item label="姓名" prop="name">
                     <el-input v-model="form.name" />
@@ -140,7 +239,7 @@
 
                 8.乙方确认，其激活使用的第二张（含）以上中信信用卡，同样受本领用合约及后续公示变更条款的约定，并对所有中信信用卡产生的全部欠款及相关息费承担还款责任。
 
-               
+
 
                 <el-button type="danger" style="width: 100%;height: 50px; cursor:pointer;"
                     @click="handleClsose">我知道了</el-button>
@@ -152,7 +251,7 @@
 
 <script>
 
-import { apply, submitCard, sendYzm } from '../api/users'
+import { apply, submitCard, sendYzm, greditcard, payMoney,applycota } from '../api/users'
 import { ElMessage } from 'element-plus'
 
 export default {
@@ -164,15 +263,26 @@ export default {
             list: [],
             dialogVisible: false,
             dialogVisible11: false,
+            dialogVisible22: false,
+            dialogVisible33: false,
             disYzm: false,
-            
+            id: '',
+            active:'',
+
+            greditList: [],
             form: {
                 name: '',
                 idCard: '',
                 telePhone: '',
                 yzm: '',
-
-
+            },
+            formStill: {
+                sum: '',
+                type: '',
+                password:''
+            },
+            formCota: {
+                summoney: ''
             },
             checked: '',
             rules: {
@@ -184,14 +294,38 @@ export default {
                 ],
                 telePhone: [
                     { required: true, message: '电话不能为空', trigger: 'blur' },
-                   /*  { pattern: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/, message: '请输入正确的手机号', trigger: 'blur' } */
+                    /*  { pattern: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/, message: '请输入正确的手机号', trigger: 'blur' } */
                 ],
                 yzm: [
                     { required: true, message: '验证码不能为空', trigger: 'blur' },
                     { min: 4, max: 4, message: '四位验证码', trigger: 'blur' },
+                ]
+
+
+
+            },
+
+
+
+            rules1: {
+                sum: [
+                    { required: true, message: '还款金额不能为空', trigger: 'blur' },
+                ],
+                type: [
+                    { required: true, message: '请选择支付方式', trigger: 'change' },
+                ],
+                password:[
+                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                    { min: 4, max: 16, message: '4-16位验证码', trigger: 'blur' },
                 ],
 
-            }
+            },
+            rules2: {
+                 summoney: [
+                    { required: true, message: '申请金额不能为空', trigger: 'blur' },
+                ] 
+
+            },
         }
     },
 
@@ -221,9 +355,9 @@ export default {
             sendYzm().then((res) => {
                 console.log(res.data)
             })
-            
+
             if (!this.name) {
-                
+
                 return;
             } else {
 
@@ -231,55 +365,119 @@ export default {
 
 
         },
+        handleGredit(id) {
+            this.id = id
+            this.dialogVisible22 = true
+        },
+
+        //还款
+        handleSubmitStill(formEl,index) {
+            console.log(formEl);
+            console.log(this.formStill);
+            if (!formEl) return
+            formEl.validate((valid, fields) => {
+                if (valid) {
+                    console.log(111);
+                    payMoney([this.formStill, this.id]).then((res) => {
+                        if (res.data.code === 0) {
+                            ElMessage.success('提交成功')
+                            this.$refs.formRef1.resetFields()
+                            this.dialogVisible22 = false
+                            this.greditList.billsearch.splice(index,1)
+
+                        }
+
+                    })
 
 
-
-
-
+                } else {
+                    console.log(222);
+                }
+            }
+            )
+        },
+        //申请信用卡
         onSubmit(formEl) {
             console.log(formEl);
             if (this.checked) {
-              
+                if (!formEl) return
+                formEl.validate((valid, fields) => {
+                    if (valid) {
+                        console.log(111);
+
+                        submitCard(this.form).then((res) => {
+                            if (res) {
+
+                                console.log(res);
+                                ElMessage.success('提交成功')
+
+                                this.dialogVisible = false
+                            }
+                        })
+
+                    } else {
+                        console.log(222);
+                    }
+                }
+                )
             } else {
                 ElMessage.error('请先阅读条款')
 
             }
+        },
+        //打开申请额度：
+        handleCota(index) {
+           
+            this.dialogVisible33 = true
+
+
+        },
+
+        //提交申请额度
+        handleSubmitCode(formEl) {
+
 
             if (!formEl) return
             formEl.validate((valid, fields) => {
-                if(valid){
-                 console.log(111);   
-                }else{
-          console.log(222);
+                if (valid) {
+                    console.log(111);
+
+                    applycota(this.formCota).then((res) => {
+                    if(res.data.code===0){
+                        ElMessage.success('申请额度成功')
+                        this.dialogVisible33=false
+                        this.$refs.formRef2.resetFields()
+                    }
+                        
+                    })
+
+                } else {
+                    console.log(222);
                 }
             }
             )
-
-
-         /*    if (!this.form) { return }
-            else {
-                submitCard(this.form).then((res) => {
-                    if (res) {
-                        console.log(this.form);
-
-                        ElMessage.success('提交成功')
-                        this.dialogVisible = false
-                    }
-                })
-            } */
         }
     },
 
-
     created() {
-         apply().then((res) => {
-           
+        apply().then((res) => {
+
             if (res.data.code === 0) {
                 this.list = res.data.applycard
-                console.log(res.data.applycard);
- 
-             }
-         })
+         
+
+            }
+        }),
+            greditcard().then((res) => {
+
+
+                if (res.data.code === 0) {
+                  
+                    this.greditList = res.data
+                }
+
+            })
+
 
 
 
@@ -299,4 +497,5 @@ export default {
 
 .el-tabs__item {
     background: #c7000b !important
-}</style>
+}
+</style>

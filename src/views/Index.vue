@@ -2,12 +2,19 @@
     <div>
 
         <el-container>
-            <el-header>
+            <el-header style="height: 70px;">
                 <ul class="left">
                     <li>个人客户</li>
                     <li>企业客户</li>
-                    <li></li>
+                    <li>
+
+
+                    </li>
                 </ul>
+
+                <img src="../img/未标题-1.png" alt="" style="vertical-align:middle">
+                <img src="../img/未标题-2.png" alt="" style="vertical-align:top">
+
 
                 <ul class="right">
                     <li>无障碍浏览</li>
@@ -115,7 +122,7 @@
                     </van-swipe-item>
                 </van-swipe>
 
-                <el-dialog v-model="dialogVisible" width="300">
+              <!--   <el-dialog v-model="dialogVisible" width="300">
                     <h2 style="margin-left: 30px;"> <span>密码登录 </span> <span>扫码登录</span> </h2>
                     <el-form :model="form" :rules="rules" label-width="50px" ref="formRef" status-icon>
                         <el-form-item label="账号" prop="telePhone">
@@ -123,7 +130,7 @@
 
                             <el-input v-model="form.telePhone" placeholder="请输入手机号 信号卡号 或身份证号" />
 
-                        </el-form-item>
+                        </el-form-item> 
 
                         <el-form-item label="密码" prop="password">
                             <el-input v-model="form.password" placeholder="请输入密码" type="password" />
@@ -139,7 +146,7 @@
                     <p style="color: blue; margin-left: 50px    ; "> <span>忘记密码 </span> &nbsp;&nbsp; &nbsp; <span>
                             立即登录</span> </p>
 
-                </el-dialog>
+                </el-dialog> -->
 
 
                 <el-dialog v-model="dialogVisible11" title="提示" width="500">
@@ -204,7 +211,7 @@ export default {
                 password: ''
 
             },
-            dialogVisible: true,
+           
             dialogVisible11: false,
             checked: '',
             rules: {
@@ -226,57 +233,13 @@ export default {
 
             this.$router.push('/applycard')
         },
-        handleLogin() {
-            this.dialogVisible = true
-        },
+      
         handleDetail() {
             this.dialogVisible11 = true
         },
         handleClsose() {
             this.dialogVisible11 = false
 
-        },
-        onSubmit(formEl) {
-            if (this.checked) {
-
-                if (!formEl) return
-                if (formEl) {
-
-                    formEl.validate((valid, fields) => {
-                        if (valid) {
-                            console.log(111);
-                            submitCard(this.form).then((res) => {
-                                if (res) {
-                                    console.log(this.form);
-
-                                    ElMessage.success('提交成功')
-                                    this.dialogVisible = false
-                                }
-                            })
-                        } else {
-                            console.log(222);
-                        }
-                    }
-                    )
-
-
-
-                } else {
-
-                    ElMessage.error('请先阅读条款')
-
-                }
-
-                loginCard(this.form).then((res) => {
-                    if (res.data.code === 0) {
-                        this.$router.push('')
-                    }
-
-                })
-            } else {
-
-                ElMessage.error('请先阅读条款')
-            }
         }
     }
 }

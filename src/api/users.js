@@ -25,6 +25,27 @@ function info() {
 function apply() {              
   return http.get('/apply')
 }
+//信用卡个人信息
+ function greditcard(data){
+  return http.post('/gredit/card',data)
+
+
+ }
+ // 信用卡还款
+
+ function  payMoney(data){
+  return http.post('/pay/money',data)
+
+ }
+
+
+//申请额度
+
+ function applycota(data){
+
+  return http.post('/apply/cota',data)
+ }
+
 
 //提交信用卡信息
 function submitCard() {              
@@ -38,5 +59,9 @@ export {
   info,
   apply,
   submitCard,
-  loginCard
+  loginCard,
+  greditcard,
+  payMoney,
+  applycota
+
 }
