@@ -199,8 +199,8 @@
 </template>
 
 <script>
-import { ElMessage } from 'element-plus'
-import { loginCard } from '../api/users'
+
+
 
 
 export default {
@@ -230,7 +230,7 @@ export default {
     },
     methods: {
         handleApplyCard() {
-
+            
             this.$router.push('/applycard')
         },
       
