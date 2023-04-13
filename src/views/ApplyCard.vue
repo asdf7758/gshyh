@@ -1,7 +1,31 @@
-                              <template>
+<template>
     <div>
-        <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
+        <div>
+            <img src="../img/未标题-1.png" alt="" style="vertical-align:middle">
+            <img src="../img/未标题-2.png" alt="" style="vertical-align:top">
+
+            <span style="float:right">
+                <el-space>
+
+                    <el-tag class="ml-2" type="danger">万丰银行首页 </el-tag>
+                    <el-tag class="ml-2" type="danger">使用指南 </el-tag>
+                    <el-tag class="ml-2" type="danger">在线客服 </el-tag>
+                </el-space>
+
+                <p style="margin-right: 20px;font-size: 20px;font-style: italic;font-weight: bold;">
+                    服务热线：400-1431-3423-342323</p>
+            </span>
+            <span>
+
+            </span>
+
+        </div>
+
+
+        <el-tabs v-model="activeName" type="card" class="demo-tabs">
             <el-tab-pane label="信用卡申请" name="first">
+                <!--    <van-notice-bar left-icon="volume-o" text=" 重要公告，
+关于2023年国际主要金融市场休市期间账户交易、外汇买卖及外币兑换暂停业务时间的通告。" /> -->
 
                 <ul style="list-style: none;margin-left: 200px;">
 
@@ -18,9 +42,97 @@
 
 
             </el-tab-pane>
-            <el-tab-pane label="查询办卡进度" name="second">查询办卡进度</el-tab-pane>
-            <el-tab-pane label="查询换卡进度" name="third">查询换卡进度</el-tab-pane>
+            <el-tab-pane label="查询办卡进度" name="second">
+
+                <h2>您申请的 审核进度</h2>
+                <van-steps :active="active">
+                    <van-step>提交成功</van-step>
+                    <van-step>正在审核</van-step>
+                    <van-step>审核完成</van-step>
+                </van-steps>
+
+            </el-tab-pane>
+            
+            <el-tab-pane label="我的信用卡" name="four">
+
+
+
+                <p> <el-icon style="color=blue ">
+                        <ChatLineSquare />
+                    </el-icon> 信用额度 </p>
+
+                <p>
+                    可用额度 <b> ￥{{ greditList.money }} </b> <el-button type="primary" @click="handleCota(11)">申请额度
+                        <el-dialog v-model="dialogVisible33" width="300">
+
+                            <el-form :model="formCota" :rules="rules2" label-width="" ref="formRef2" status-icon>
+                                <el-form-item label="" prop="summoney">
+                                    <el-input v-model="formCota.summoney" placeholder="请输入申请金额" style="width: 220px; " />
+                                </el-form-item>
+
+                                
+                                <el-button type="primary" @click="handleSubmitCode($refs.formRef2)" style="width: 200px;margin-top: 20px;   "> 提交 </el-button>
+
+
+                            </el-form>
+
+                        </el-dialog>
+
+
+                    </el-button>
+                </p>
+                <hr>
+                <ul>
+                    <li v-for="item, index in greditList.billsearch" :key="item.id" style="border-bottom: 1px solid  #ccc;width: 700px;"> 
+                 <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;">  待还金额：{{ item.meta }}   </span>
+                 <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;">  还款日： {{ item.date }}  </span>
+                 <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 最低还款：{{ item.zdMeta }}   </span>
+               <el-button type="primary" @click="handleGredit(index)">立即还款 </el-button> 
+
+                    </li>
+
+                    <el-dialog v-model="dialogVisible22" width="300">
+                        <h3 style="text-align: center;">还款金额</h3>
+                        <el-form :model="formStill" :rules="rules1" label-width="" ref="formRef1" status-icon>
+                            <el-form-item label="" prop="sum">
+                                <el-input v-model="formStill.sum" placeholder="请输入还款金额" style="width: 220px; " />
+                            </el-form-item>
+
+                            
+                            <el-form-item label="">
+                                <el-select v-model="formStill.type" placeholder="请选择支付方式"  prop="type">
+                                    <el-option label="微信" value="微信" />
+                                    <el-option label="支付宝" value="支付宝" />
+                                    <el-option label="工商银行" value="工商银行" />
+                                    <el-option label="中国银行" value="中国银行" />
+                                    <el-option label="建设银行" value="建设银行" />
+                                </el-select>
+
+                                <el-form-item label="" prop="password">
+                                <el-input v-model="formStill.password" placeholder="请输入密码" style="width: 220px; " />
+                            </el-form-item>
+
+                                <el-button type="primary" @click="handleSubmitStill($refs.formRef1)"
+                                style="width: 200px;margin-top: 20px;">立即还款</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
+
+                </ul>
+
+
+
+
+
+
+
+
+            </el-tab-pane>
+            <el-tab-pane label="历史账单" name="five">
+
+            </el-tab-pane>
         </el-tabs>
+
         <el-dialog v-model="dialogVisible" title="提示" width="500">
             <el-form :model="form" :rules="rules" label-width="90px" ref="formRef" status-icon>
 
@@ -36,18 +148,30 @@
                     <el-input v-model="form.telePhone" />
                 </el-form-item>
 
+
                 <el-form-item label="验证码" prop="yzm">
-                    <el-input v-model="form.yzm" />
+                    <el-row>
+                        <el-col :span="16">
+                            <el-input class="yzm-content" v-model="form.yzm" />
+                        </el-col>
+                        <el-col :span="8">
+                            <el-button class="yzm-button" @click="handleSendYzm" :disabled="disYzm">
+                                {{ txtValue }}</el-button>
+                        </el-col>
+                    </el-row>
                 </el-form-item>
+
+
+
 
             </el-form>
 
             <p class="dialog-footer">
-                <el-button type="danger" @click="onSubmit(formRef)"
+                <el-button type="danger" @click="onSubmit($refs.formRef)"
                     style="margin-left: 120px;height: 50px;">同意以下合约条款并同意申请</el-button>
             </p>
 
-            <input type="checkbox" v-model="checked" />本人已阅读清楚知晓 <span style="color: blue;"
+            <input type="checkbox" v-model="checked" />本人已阅读清楚知晓 <span style="color: blue; cursor:pointer;"
                 @click="handleDetail">《工商银行信用卡（个人卡）领用合约》
                 《个人资信信息（含个人信用信息）处理授权书》涉及电信网络新型违法犯罪合约法律责任及防范提示告知书 </span>
             <p>该信用卡的相关信息，愿意遵守合约条款的各项规则。
@@ -61,7 +185,7 @@
 
 
         </el-dialog>
-        <el-dialog v-model="dialogVisible11" title="提示" width="500" style="position: relative;overflow: scroll;">
+        <el-dialog v-model="dialogVisible11" title="提示" width="500">
             <p>
                 中信银行信用卡（个人卡）领用合约
                 （信银卡字[2023]31号）
@@ -115,58 +239,51 @@
 
                 8.乙方确认，其激活使用的第二张（含）以上中信信用卡，同样受本领用合约及后续公示变更条款的约定，并对所有中信信用卡产生的全部欠款及相关息费承担还款责任。
 
-                第二条 使用
 
-                1.信用卡仅限乙方用于购买商品、接受服务、信用卡现金提取等合法合规领域，不得用于生产经营、证券市场、股本权益性投资及房地产开发等非消费领域，严禁用于套现，更严禁用作违法用途。
 
-                2.甲方获悉乙方有下列情形之一的，有权立即采取取消乙方参加甲方积分计划，取消权益和参与市场活动资格，强制更换卡片，重置密码，降低或取消信用额度，限制用卡，要求提前偿还全部应还款项，要求落实第二还款来源，取消用卡资格、停止卡片使用并终止本合约等措施，乙方承担由此产生的全部责任，同时甲方有权对乙方因此取得的全部利益进行追索并要求乙方赔偿甲方因此造成的全部损失：
-
-                （1）乙方有欺诈、恶意串通或违反诚信原则的行为，包括但不限于利用信用卡进行虚假交易等欺诈活动套取银行信贷资金、积分、权益、里程、奖品或增值服务，倒卖或违反规定转赠权益等；
-
-                （2）乙方将信用卡用于生产经营、证券市场、股本权益性投资及房地产开发等非消费领域的，或利用信用卡从事非法活动的，或有涉赌、涉诈、洗钱嫌疑的；
-
-                （3）乙方向甲方提供虚假申请资料的，或明知受理人非甲方认可渠道的工作人员或非法中介，而将资料交给他人办理信用卡从而造成甲方资金损失的；
-
-                （4）乙方未妥善保管其信用卡、证件及相关信息，导致信用卡、身份证件被盗用或冒用，敏感信息丢失、泄露的，或将信用卡出租、转借或交由他人使用的；
-
-                （5）乙方拒不配合或失联、难联，导致甲方难以对相关持卡人身份、信用卡交易或争议等情况进行调查的；
-
-                （6）乙方自其信息资料发生变更7日内未主动进行更新的，包括但不限于个人身份信息、身份证明文件有效期、职业信息、有效的手机号码、办公电话、住宅电话、其他联系人电话、配偶信息、居住信息、附属卡持卡人信息等；
-
-                （7）乙方未依约履行还款义务；
-
-                （8）乙方有其他违反法律法规规章、行业组织规定，违反本合约约定或存在其他非正常用卡的情形。
-
-                3. 乙方应当合法合规用卡。当乙方发生违反本条第1、2款约定的非正常用卡情形时，乙方将可能出现个人信息泄露、个人征信受损、司法诉讼等风险，乙方除需承担本合约约定的责任外，还需承担法律法规规定的其他责任。
-
-                4.乙方进行销户、销卡、卡片降级的，乙方账户或相关卡片对应的权益及参加相关活动的资格将被取消。
-
-                <el-button type="danger"
-                    style="width: 100%;height: 50px;position: absolute;bottom: 0;left: 0;">我知道了</el-button>
+                <el-button type="danger" style="width: 100%;height: 50px; cursor:pointer;"
+                    @click="handleClsose">我知道了</el-button>
             </p>
-        </el-dialog>>
+        </el-dialog>
 
     </div>
 </template>
 
 <script>
-import { apply } from '../api/users'
+
+import { apply, submitCard, sendYzm, greditcard, payMoney,applycota } from '../api/users'
 import { ElMessage } from 'element-plus'
+
 export default {
     data() {
 
         return {
             activeName: 'first',
+            txtValue: '发送验证码',
             list: [],
-            dialogVisible: 'false',
-            dialogVisible11: 'false',
-            formRef:[],
-            form: ({
+            dialogVisible: false,
+            dialogVisible11: false,
+            dialogVisible22: false,
+            dialogVisible33: false,
+            disYzm: false,
+            id: '',
+            active:'',
+
+            greditList: [],
+            form: {
                 name: '',
                 idCard: '',
                 telePhone: '',
                 yzm: '',
-            }),
+            },
+            formStill: {
+                sum: '',
+                type: '',
+                password:''
+            },
+            formCota: {
+                summoney: ''
+            },
             checked: '',
             rules: {
                 name: [
@@ -177,58 +294,195 @@ export default {
                 ],
                 telePhone: [
                     { required: true, message: '电话不能为空', trigger: 'blur' },
-                    { pattern: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/, message: '请输入正确的手机号', trigger: 'blur' }
+                    /*  { pattern: /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-79])|(?:5[0-35-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1589]))\d{8}$/, message: '请输入正确的手机号', trigger: 'blur' } */
                 ],
                 yzm: [
                     { required: true, message: '验证码不能为空', trigger: 'blur' },
+                    { min: 4, max: 4, message: '四位验证码', trigger: 'blur' },
+                ]
+
+
+
+            },
+
+
+
+            rules1: {
+                sum: [
+                    { required: true, message: '还款金额不能为空', trigger: 'blur' },
+                ],
+                type: [
+                    { required: true, message: '请选择支付方式', trigger: 'change' },
+                ],
+                password:[
+                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                    { min: 4, max: 16, message: '4-16位验证码', trigger: 'blur' },
                 ],
 
-            }
+            },
+            rules2: {
+                 summoney: [
+                    { required: true, message: '申请金额不能为空', trigger: 'blur' },
+                ] 
+
+            },
         }
     },
 
     methods: {
         showInput() {
-            this.dialogVisible = 'true'
+            this.dialogVisible = true
         },
         handleDetail() {
-            this.dialogVisible11 = 'true'
+            this.dialogVisible11 = true
         },
-        onSubmit(form) {
-            if (this.checked) {
-                console.log(form); 
-                console.log(this.checked);
+        handleClsose() {
+            this.dialogVisible11 = false
+        },
+        handleSendYzm() {
+            let count = 10
+            this.disYzm = true;
+            const timer = setInterval(() => {
+                count--
+                this.txtValue = `${count}秒后可再次发送`
+                if (count === 0) {
+                    this.disYzm = false;
+                    this.txtValue = '发送验证码',
+                        clearInterval(timer)
+                }
+            }, 1000)
+            console.log(111);
+            sendYzm().then((res) => {
+                console.log(res.data)
+            })
+
+            if (!this.name) {
+
+                return;
             } else {
-                ElMessage.error('请先阅读条款')
+
             }
 
 
-            if (!form) return
-            formEl.validate((valid) => {
+        },
+        handleGredit(id) {
+            this.id = id
+            this.dialogVisible22 = true
+        },
+
+        //还款
+        handleSubmitStill(formEl,index) {
+            console.log(formEl);
+            console.log(this.formStill);
+            if (!formEl) return
+            formEl.validate((valid, fields) => {
                 if (valid) {
-                    console.log('submit!')
+                    console.log(111);
+                    payMoney([this.formStill, this.id]).then((res) => {
+                        if (res.data.code === 0) {
+                            ElMessage.success('提交成功')
+                            this.$refs.formRef1.resetFields()
+                            this.dialogVisible22 = false
+                            this.greditList.billsearch.splice(index,1)
+
+                        }
+
+                    })
+
+
                 } else {
-                    console.log('error submit!')
-                    return false
+                    console.log(222);
                 }
-            })
+            }
+            )
+        },
+        //申请信用卡
+        onSubmit(formEl) {
+            console.log(formEl);
+            if (this.checked) {
+                if (!formEl) return
+                formEl.validate((valid, fields) => {
+                    if (valid) {
+                        console.log(111);
+
+                        submitCard(this.form).then((res) => {
+                            if (res) {
+
+                                console.log(res);
+                                ElMessage.success('提交成功')
+
+                                this.dialogVisible = false
+                            }
+                        })
+
+                    } else {
+                        console.log(222);
+                    }
+                }
+                )
+            } else {
+                ElMessage.error('请先阅读条款')
+
+            }
+        },
+        //打开申请额度：
+        handleCota(index) {
+           
+            this.dialogVisible33 = true
+
+
+        },
+
+        //提交申请额度
+        handleSubmitCode(formEl) {
+
+
+            if (!formEl) return
+            formEl.validate((valid, fields) => {
+                if (valid) {
+                    console.log(111);
+
+                    applycota(this.formCota).then((res) => {
+                    if(res.data.code===0){
+                        ElMessage.success('申请额度成功')
+                        this.dialogVisible33=false
+                        this.$refs.formRef2.resetFields()
+                    }
+                        
+                    })
+
+                } else {
+                    console.log(222);
+                }
+            }
+            )
         }
     },
 
-
     created() {
-        /*   apply().then((res)=>{
-              console.log(res);
-          }) */
-        fetch('http://127.0.0.1:5173/api/apply/card').then(response => response.json())
-            .then(res => {
-                console.log(res)
+        apply().then((res) => {
 
-                if (res.code === 0) {
-                    this.list = res.data.applycard
-                    console.log(this.list);
+            if (res.data.code === 0) {
+                this.list = res.data.applycard
+         
+
+            }
+        }),
+            greditcard().then((res) => {
+
+
+                if (res.data.code === 0) {
+                  
+                    this.greditList = res.data
                 }
+
             })
+
+
+
+
+
+
 
     }
 }
