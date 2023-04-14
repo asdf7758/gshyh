@@ -21,8 +21,7 @@
                         <span>请填写取款金额</span>
                     </el-form-item>
                     <el-form-item label="日期:" prop="userGetmoneyTime">
-                        <el-date-picker v-model="form.userGetmoneyTime" type="datetime" />
-                        <span>请填写日期</span>
+                        <el-date-picker v-model="form.userGetmoneyTime" type="datetime" placeholder="请选择取款日期时间" />
                     </el-form-item>
                     <el-form-item class="denglu">
                         <el-button type="primary" @click="onSubmit($refs.ruleFormRef)">申请取款</el-button>
@@ -97,32 +96,24 @@ export default {
             formEl.validate((valid, fields) => {
                 if (valid) {
                     console.log('submit!')
-                    money(this.form).then((res) => {
-                        if (res.data.code === 1) {
-                            // 添加到状态管理和本地存储中
-                            ElMessage.success('注册成功')
-                            this.$router.push('/')
-                        }
-                        else {
-                            ElMessage.error('注册失败')
-                        }
-                    })
+                    if (this.form.userGetmoney >= 10000) {
+                        money(this.form).then((res) => {
+                            if (res.data.code === 1) {
+                                // 添加到状态管理和本地存储中
+                                ElMessage.success('注册成功')
+                                this.$router.push('/')
+                            }
+                            else {
+                                ElMessage.error('注册失败')
+                            }
+                        })
+                    } else {
+                        ElMessage.error('本行只支持一万以上的取款')
+                    }
                 } else {
                     console.log('error submit!', fields)
                 }
             })
-        },
-        baoxian() {
-            this.$router.push('/baoxian')
-        },
-        handleOperation() {
-            this.$router.push('/operation')
-        },
-        handleProblem() {
-            this.$router.push('/problem')
-        },
-        handleSafety() {
-            this.$router.push('/safety')
         }
     }
 }
@@ -141,7 +132,7 @@ export default {
 .el-main {
     width: 100%px;
     height: 500px;
-    background: url(../img/register.png) no-repeat 50%;
+    background: url(../img/存款.webp) no-repeat 50%;
     background-size: cover;
 }
 
@@ -192,14 +183,15 @@ export default {
 
 .el-form {
     display: inline-block;
-    /* width: 100%; */
-    /* height: 24.375rem; */
+    /* width: 500px; */
+    height: 24.375rem;
     padding: 0;
     /* margin: 5rem 1.875rem 3.125rem; */
     text-align: center;
-    /* background: hsla(0, 0%, 100%, .8); */
+    background: hsla(0, 0%, 100%, .8);
     border-radius: 0.625rem;
-    margin-top: 20px;
+    /* margin-top: 20px; */
+    margin-left: 700px;
 
 }
 
@@ -208,7 +200,7 @@ export default {
     justify-content: space-between;
     margin: 10px;
     /* margin-top: 40px; */
-    margin-left: 550px;
+    /* margin-left: 550px; */
     margin-top: 30px;
 }
 
@@ -219,17 +211,19 @@ export default {
 }
 
 .denglu {
-    width: 100%;
+    /* width: 100%; */
     /* background: wheat; */
-    margin: 0 auto;
+    /* margin: 0 auto; */
     margin-top: 30px;
-    margin-left: 250px;
+    margin-right:100px;
+
+    /* margin-left: 250px; */
 }
 
 .el-button {
     width: 170px;
-    margin: auto;
-    margin-left: 370px;
+    /* margin: auto; */
+    /* margin-left: 370px; */
     margin-bottom: 20px;
 }
 
