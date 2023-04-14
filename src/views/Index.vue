@@ -65,10 +65,10 @@
 
                     <el-sub-menu index="2">
                         <template #title>存款与贷款</template>
-                        <el-menu-item index="2-1">item one</el-menu-item>
-                        <el-menu-item index="2-2">item two</el-menu-item>
-                        <el-menu-item index="2-3">item three</el-menu-item>
-                        <el-menu-item index="2-4">item three</el-menu-item>
+                        <el-menu-item index="2-1" @click="handleDetail">贷款申请页</el-menu-item>
+                        <el-menu-item index="2-2">我的贷款</el-menu-item>
+                        <el-menu-item index="2-3">申请贷款</el-menu-item>
+                    
                     </el-sub-menu>
 
                     <el-sub-menu index="3">
@@ -220,10 +220,11 @@ export default {
             
             this.$router.push('/applycard')
         },
-      
-        handleDetail() {
-            this.dialogVisible11 = true
+        handleDetail(){
+          this.$router.push('/applicationdetail')
         },
+      
+     
         handleClose(){
            //清楚token   跳转登录页
            this.$router.push('/login')
