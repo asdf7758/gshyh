@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '../store'
 
 const Login = () => import('../views/Login.vue')
 const Index = () => import('../views/Index.vue')
@@ -25,33 +26,36 @@ const router = createRouter({
       path: '/',
       name: 'index',
       component: Index,
-      meta:{
-        auth:false
+      meta: {
+        auth: false
       }
     }, {
       path: '/login',
       name: 'login',
 
       component: Login,
-     
+
     },
     {
       path: '/register',
       name: 'register',
       component: Register,
-     
+
     },
     {
       path: '/applycard',
       name: 'applycard',
       component: ApplyCard,
-    
+      meta: {
+        auth: true
+      }
+
     },
     {
       path: '/operation',
       name: 'operation',
       component: Operation,
-    
+
     },
     {
       path: '/baoxian',
@@ -61,7 +65,7 @@ const router = createRouter({
         auth:false
       } */
     }
-    ,{
+    , {
       path: '/userloan',
       name: 'userLoanindex',
       component: UserLoan
@@ -79,8 +83,9 @@ const router = createRouter({
     {
       path: '/applicationdetail',
       name: 'applicationDetail',
-      component: ApplicationDetail}
-      ,
+      component: ApplicationDetail
+    }
+    ,
     {
       path: '/message',
       name: 'message',
@@ -89,22 +94,25 @@ const router = createRouter({
 
   ]
 })
-/* 
+
 router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
-    store.dispatch('usersToken/info').then((res) => {
+    console.log(111);
+    store.commit('userToken/updateUsername','15012341234')
+    next()
+    /* store.dispatch('usersToken/info').then((res) => {
       if (res.data.errcode === 0) { //token校验成功
         next()
       }
       else { //token校验失败
         next('/login')
       }
-    })
+    }) */
   }
   else {
     next()
   }
-}) */
+})
 
 
 export default router

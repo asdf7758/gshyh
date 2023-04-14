@@ -3,32 +3,24 @@
         <div>
             <img src="../img/未标题-1.png" alt="" style="vertical-align:middle">
             <img src="../img/未标题-2.png" alt="" style="vertical-align:top">
-
             <span style="float:right">
                 <el-space>
-
                     <el-tag class="ml-2" type="danger">万丰银行首页 </el-tag>
                     <el-tag class="ml-2" type="danger">使用指南 </el-tag>
                     <el-tag class="ml-2" type="danger">在线客服 </el-tag>
                 </el-space>
-
                 <p style="margin-right: 20px;font-size: 20px;font-style: italic;font-weight: bold;">
                     服务热线：400-1431-3423-342323</p>
+            </span>      
+                  <span>
             </span>
-            <span>
-
-            </span>
-
         </div>
-
-
         <el-tabs v-model="activeName" type="card" class="demo-tabs">
             <el-tab-pane label="信用卡申请" name="first">
                 <!--    <van-notice-bar left-icon="volume-o" text=" 重要公告，
 关于2023年国际主要金融市场休市期间账户交易、外汇买卖及外币兑换暂停业务时间的通告。" /> -->
 
                 <ul style="list-style: none;margin-left: 200px;">
-
                     <li v-for="item, index in list" style="display: inline-block;width: 220px;margin-right: 20px;;;"
                         :key="item.id">
                         <img :src="item.image" alt="" style="width: 200px;height: 124px">
@@ -36,31 +28,22 @@
                         <p style="font-size: 13px;">{{ item.content }}</p>
                         <van-button type="primary" style="margin: left 25px; ;width: 150px;"
                             @click="showInput">立即申请</van-button>
-
                     </li>
                 </ul>
-
-
             </el-tab-pane>
             <el-tab-pane label="查询办卡进度" name="second">
-
                 <h2>您申请的 审核进度</h2>
                 <van-steps :active="active">
                     <van-step>提交成功</van-step>
                     <van-step>正在审核</van-step>
                     <van-step>审核完成</van-step>
                 </van-steps>
-
             </el-tab-pane>
             
             <el-tab-pane label="我的信用卡" name="four">
-
-
-
                 <p> <el-icon style="color=blue ">
                         <ChatLineSquare />
                     </el-icon> 信用额度 </p>
-
                 <p>
                     可用额度 <b> ￥{{ greditList.money }} </b> <el-button type="primary" @click="handleCota(11)">申请额度
                         <el-dialog v-model="dialogVisible33" width="300">
@@ -117,16 +100,7 @@
                             </el-form-item>
                         </el-form>
                     </el-dialog>
-
                 </ul>
-
-
-
-
-
-
-
-
             </el-tab-pane>
             <el-tab-pane label="历史账单" name="five">
 
@@ -219,7 +193,6 @@
                 第一条 申请
 
                 1.为订立及履行本协议之目的，乙方保证向甲方提供的所有申请资料是真实完整、准确有效的，同意并授权甲方自信用卡申领之日起，以信用卡审核、风险管理、资产管理和异议核查等信用卡相关业务为目的，向中国人民银行金融信用信息基础数据库查询、使用个人信用信息及信用报告。向百行征信有限公司、朴道征信有限公司和其他依法设立的征信机构及其他合法机构（包括依法设立的资信评估机构或有关法律、监管机构许可的类似机构；行政机关；事业单位；司法机关；教育部学生服务与素质发展中心；电信运营商（或其授权的服务商）；乙方所属工作单位/组织；中信集团成员（含分支机构及附属机构）、中信银行的服务机构、代理人、外包作业机构）和个人依法收集、传输、提供乙方的个人身份信息、信用信息、个人生物特征信息、资产财产及负债信息、工作信息、运营商信息、学历/学籍信息、社保信息、公积金信息、设备信息、地址信息、航空出行信息、保险信息等，并对上述信息进行存储、使用及加工。
-
                 甲方处理个人信息应当具有明确、合理的目的，并应当与处理目的直接相关，采取对个人权益影响最小的方式。乙方同意甲方根据法律法规要求和业务需要保留上述必要的相关资料。
 
                 2.甲方有权依据乙方的资信状况决定是否批准乙方的主卡或附属卡的申请。主卡申请人应当确保附属卡申请人知悉、理解并遵守本合约，并对附属卡申请人的所有用卡行为承担责任，包括但不限于清偿附属卡全部债务，具有完全民事行为能力的附属卡申请人对本人附属卡产生的全部债务承担连带清偿责任。
@@ -253,6 +226,7 @@
 
 import { apply, submitCard, sendYzm, greditcard, payMoney,applycota } from '../api/users'
 import { ElMessage } from 'element-plus'
+import store from '../store'
 
 export default {
     data() {
@@ -266,6 +240,7 @@ export default {
             dialogVisible22: false,
             dialogVisible33: false,
             disYzm: false,
+            username:'',
             id: '',
             active:'',
 
@@ -355,15 +330,9 @@ export default {
             sendYzm().then((res) => {
                 console.log(res.data)
             })
-
             if (!this.name) {
-
                 return;
-            } else {
-
-            }
-
-
+            } 
         },
         handleGredit(id) {
             this.id = id
@@ -372,24 +341,20 @@ export default {
 
         //还款
         handleSubmitStill(formEl,index) {
-            console.log(formEl);
-            console.log(this.formStill);
+         
+      
             if (!formEl) return
             formEl.validate((valid, fields) => {
                 if (valid) {
                     console.log(111);
-                    payMoney([this.formStill, this.id]).then((res) => {
+                    payMoney([this.formStill, this.id,this.username]).then((res) => {
                         if (res.data.code === 0) {
                             ElMessage.success('提交成功')
                             this.$refs.formRef1.resetFields()
                             this.dialogVisible22 = false
                             this.greditList.billsearch.splice(index,1)
-
                         }
-
                     })
-
-
                 } else {
                     console.log(222);
                 }
@@ -426,29 +391,22 @@ export default {
             }
         },
         //打开申请额度：
-        handleCota(index) {
-           
+        handleCota(index) {           
             this.dialogVisible33 = true
-
-
         },
 
         //提交申请额度
         handleSubmitCode(formEl) {
-
-
             if (!formEl) return
             formEl.validate((valid, fields) => {
                 if (valid) {
                     console.log(111);
-
-                    applycota(this.formCota).then((res) => {
+                    applycota(this.formCota,this.username ).then((res) => {
                     if(res.data.code===0){
                         ElMessage.success('申请额度成功')
                         this.dialogVisible33=false
                         this.$refs.formRef2.resetFields()
-                    }
-                        
+                    }                        
                     })
 
                 } else {
@@ -458,36 +416,25 @@ export default {
             )
         }
     },
+    computed (){
+         this.username=store.state.userToken.username 
+    },
 
     created() {
         apply().then((res) => {
 
             if (res.data.code === 0) {
-                this.list = res.data.applycard
-         
-
+                this.list = res.data.applycard       
             }
         }),
             greditcard().then((res) => {
-
-
-                if (res.data.code === 0) {
-                  
+                if (res.data.code === 0) {                  
                     this.greditList = res.data
                 }
-
             })
-
-
-
-
-
-
-
     }
 }
 </script>
-
 <style  scoped>
 .el-tabs {
 
