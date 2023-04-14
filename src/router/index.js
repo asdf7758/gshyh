@@ -12,9 +12,9 @@ const ApplyCard = () => import('../views/ApplyCard.vue')
 const Baoxian = () => import('../views/Baoxian.vue')
 const Register = () => import('../views/Register.vue')
 const Operation = () => import('../views/Operation.vue')
-
-
-
+const Getmoney = () => import('../views/Getmoney.vue')
+const Problem = ()=>import('../views/Problem.vue')
+const Safety = ()=>import('../views/Safety.vue')
 
 
 
@@ -43,6 +43,14 @@ const router = createRouter({
 
     },
     {
+      path: '/getmoney',
+      name: 'getmoney',
+      component: Getmoney,
+      meta: {
+        auth: true
+      }
+    },
+    {
       path: '/applycard',
       name: 'applycard',
       component: ApplyCard,
@@ -55,6 +63,19 @@ const router = createRouter({
       path: '/operation',
       name: 'operation',
       component: Operation,
+
+    },
+    ,
+    {
+      path: '/problem',
+      name: 'problem',
+      component: Problem,
+
+    },
+    {
+      path: '/safety',
+      name: 'safety',
+      component: Safety,
 
     },
     {
@@ -99,6 +120,8 @@ router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
     console.log('全局首位已启动');
     store.commit('userToken/updateUsername','15012341234')
+    console.log(111);
+    // store.commit('userToken/updateUsername','15012341234')
     next()
     /* store.dispatch('usersToken/info').then((res) => {
       if (res.data.errcode === 0) { //token校验成功
