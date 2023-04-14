@@ -7,15 +7,15 @@ const movies = [
 const applycard = [
   {
     id: '1300022', title: '牡丹超惠系信用卡', content: '真金制、真回馈、真减费、真让利，专享三大分期、透支利率六折，爱购新客礼。硬核超惠，真情回馈！适用计息方式二。详询官网',
-    image: 'https://img2.baidu.com/it/u=4106670977,2761874286&fm=253&fmt=auto&app=138&f=JPEG?w=805&h=500'
+    image: 'http://creditcard2.ccb.com/cn/creditcard/upload/2019923135237316109.png'
   },
   {
     id: '1410386', title: '工银未来系列信用卡 ', content: '   5折乘地铁，5折乘高铁，2折乘公交，1分钱骑单车！绿色消费兑换礼遇，新客达标领拉杆箱或红包。适用计息方式二。详询官网 ',
-    image: 'https://img2.baidu.com/it/u=3103486797,1843925878&fm=253&fmt=auto&app=138&f=PNG?w=500&h=281'
+    image: 'http://creditcard2.ccb.com/cn/creditcard/upload/2019923135345605071.jpg'
   },
   {
-    id: '1418991', title: '工银北京环球度假区联名卡', content: ' 独家授权发行，尊享提前入园，消费达标送门票，赢2天1晚旅行套餐等多重限定礼遇，适用计息方式一。详询官网 ',
-    image: 'https://img2.baidu.com/it/u=564944949,1857846756&fm=253&fmt=auto&app=120&f=JPEG?w=1000&h=750'
+    id: '1418991', title: '工银北京环球区联名卡', content: ' 独家授权发行，尊享提前入园，消费达标送门票，赢2天1晚旅行套餐等多重限定礼遇，适用计息方式一。详询官网 ',
+    image: '	http://creditcard2.ccb.com/cn/creditcard/upload/2019923135540193367.jpg'
   }
 ];
 

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>
+        <div style=";">
             <img src="../img/未标题-1.png" alt="" style="vertical-align:middle">
             <img src="../img/未标题-2.png" alt="" style="vertical-align:top">
             <span style="float:right">
@@ -9,13 +9,15 @@
                     <el-tag class="ml-2" type="danger">使用指南 </el-tag>
                     <el-tag class="ml-2" type="danger">在线客服 </el-tag>
                 </el-space>
+
                 <p style="margin-right: 20px;font-size: 20px;font-style: italic;font-weight: bold;">
                     服务热线：400-1431-3423-342323</p>
-            </span>      
-                  <span>
+            </span>
+            <span>
             </span>
         </div>
-        <el-tabs v-model="activeName" type="card" class="demo-tabs">
+        <el-tabs v-model="activeName" type="card" class="demo-tabs"
+            style="width: 1000px;margin: 0 auto;background-color:#ddd  ;height: 1050px;color: black;">
             <el-tab-pane label="信用卡申请" name="first">
                 <!--    <van-notice-bar left-icon="volume-o" text=" 重要公告，
 关于2023年国际主要金融市场休市期间账户交易、外汇买卖及外币兑换暂停业务时间的通告。" /> -->
@@ -39,38 +41,58 @@
                     <van-step>审核完成</van-step>
                 </van-steps>
             </el-tab-pane>
-            
+
             <el-tab-pane label="我的信用卡" name="four">
-                <p> <el-icon style="color=blue ">
-                        <ChatLineSquare />
-                    </el-icon> 信用额度 </p>
-                <p>
-                    可用额度 <b> ￥{{ greditList.money }} </b> <el-button type="primary" @click="handleCota(11)">申请额度
-                        <el-dialog v-model="dialogVisible33" width="300">
+                <div>
 
-                            <el-form :model="formCota" :rules="rules2" label-width="" ref="formRef2" status-icon>
-                                <el-form-item label="" prop="summoney">
-                                    <el-input v-model="formCota.summoney" placeholder="请输入申请金额" style="width: 220px; " />
-                                </el-form-item>
+                    <div>
+                        <p>  <span style="font-weight: bold;">
+                            信用额度
+                        </span> 
+                        <div style="float:right; margin-top: -20px;">
+                            <h3>
+                               
+                                尊贵的：牡丹超惠系列信用卡用户您好！
+                            </h3>
+                            <h3> 613***************6511</h3>
+                        </div>
+                        </p>
+                        <p>
+                            可用额度 <b> ￥{{ greditList.money }} </b> <el-button type="primary" @click="handleCota(11)">申请额度
 
-                                
-                                <el-button type="primary" @click="handleSubmitCode($refs.formRef2)" style="width: 200px;margin-top: 20px;   "> 提交 </el-button>
+                                <el-dialog v-model="dialogVisible33" width="300">
+
+                                    <el-form :model="formCota" :rules="rules2" label-width="" ref="formRef2" status-icon>
+                                        <el-form-item label="" prop="summoney">
+                                            <el-input v-model="formCota.summoney" placeholder="请输入申请金额"
+                                                style="width: 220px; " />
+                                        </el-form-item>
 
 
-                            </el-form>
+                                        <el-button type="primary" @click="handleSubmitCode($refs.formRef2)"
+                                            style="width: 200px;margin-top: 20px;   "> 提交 </el-button>
+                                    </el-form>
+                                </el-dialog>
+                            </el-button>
 
-                        </el-dialog>
+
+                        </p>
+                    </div>
 
 
-                    </el-button>
-                </p>
+                </div>
+
                 <hr>
-                <ul>
-                    <li v-for="item, index in greditList.billsearch" :key="item.id" style="border-bottom: 1px solid  #ccc;width: 700px;"> 
-                 <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;">  待还金额：{{ item.meta }}   </span>
-                 <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;">  还款日： {{ item.date }}  </span>
-                 <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 最低还款：{{ item.zdMeta }}   </span>
-               <el-button type="primary" @click="handleGredit(index)">立即还款 </el-button> 
+                <ul style="margin-top: 30px  ;">
+                    <li v-for="item, index in greditList.billsearch" :key="item.id"
+                        style="border-bottom: 1px solid  #ccc;width: 700px;margin: 0 auto;margin-top: 10px  ;">
+                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 待还金额：{{ item.meta }}
+                        </span>
+                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 还款日： {{ item.date }}
+                        </span>
+                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 最低还款：{{ item.zdMeta
+                        }} </span>
+                        <el-button type="primary" @click="handleGredit(index)">立即还款 </el-button>
 
                     </li>
 
@@ -81,9 +103,9 @@
                                 <el-input v-model="formStill.sum" placeholder="请输入还款金额" style="width: 220px; " />
                             </el-form-item>
 
-                            
+
                             <el-form-item label="">
-                                <el-select v-model="formStill.type" placeholder="请选择支付方式"  prop="type">
+                                <el-select v-model="formStill.type" placeholder="请选择支付方式" prop="type">
                                     <el-option label="微信" value="微信" />
                                     <el-option label="支付宝" value="支付宝" />
                                     <el-option label="工商银行" value="工商银行" />
@@ -92,11 +114,11 @@
                                 </el-select>
 
                                 <el-form-item label="" prop="password">
-                                <el-input v-model="formStill.password" placeholder="请输入密码" style="width: 220px; " />
-                            </el-form-item>
+                                    <el-input v-model="formStill.password" placeholder="请输入密码" style="width: 220px; " />
+                                </el-form-item>
 
                                 <el-button type="primary" @click="handleSubmitStill($refs.formRef1)"
-                                style="width: 200px;margin-top: 20px;">立即还款</el-button>
+                                    style="width: 200px;margin-top: 20px;">立即还款</el-button>
                             </el-form-item>
                         </el-form>
                     </el-dialog>
@@ -224,7 +246,7 @@
 
 <script>
 
-import { apply, submitCard, sendYzm, greditcard, payMoney,applycota } from '../api/users'
+import { apply, submitCard, sendYzm, greditcard, payMoney, applycota } from '../api/users'
 import { ElMessage } from 'element-plus'
 import store from '../store'
 
@@ -240,9 +262,9 @@ export default {
             dialogVisible22: false,
             dialogVisible33: false,
             disYzm: false,
-            username:'',
+            username: '',
             id: '',
-            active:'',
+            active: '',
 
             greditList: [],
             form: {
@@ -254,7 +276,7 @@ export default {
             formStill: {
                 sum: '',
                 type: '',
-                password:''
+                password: ''
             },
             formCota: {
                 summoney: ''
@@ -289,16 +311,16 @@ export default {
                 type: [
                     { required: true, message: '请选择支付方式', trigger: 'change' },
                 ],
-                password:[
+                password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
                     { min: 4, max: 16, message: '4-16位验证码', trigger: 'blur' },
                 ],
 
             },
             rules2: {
-                 summoney: [
+                summoney: [
                     { required: true, message: '申请金额不能为空', trigger: 'blur' },
-                ] 
+                ]
 
             },
         }
@@ -332,7 +354,7 @@ export default {
             })
             if (!this.name) {
                 return;
-            } 
+            }
         },
         handleGredit(id) {
             this.id = id
@@ -340,19 +362,19 @@ export default {
         },
 
         //还款
-        handleSubmitStill(formEl,index) {
-         
-      
+        handleSubmitStill(formEl, index) {
+
+
             if (!formEl) return
             formEl.validate((valid, fields) => {
                 if (valid) {
                     console.log(111);
-                    payMoney([this.formStill, this.id,this.username]).then((res) => {
+                    payMoney([this.formStill, this.id, this.username]).then((res) => {
                         if (res.data.code === 0) {
                             ElMessage.success('提交成功')
                             this.$refs.formRef1.resetFields()
                             this.dialogVisible22 = false
-                            this.greditList.billsearch.splice(index,1)
+                            this.greditList.billsearch.splice(index, 1)
                         }
                     })
                 } else {
@@ -391,7 +413,8 @@ export default {
             }
         },
         //打开申请额度：
-        handleCota(index) {           
+        handleCota(index) {
+            console.log(this.$store.state.userToken.username);
             this.dialogVisible33 = true
         },
 
@@ -401,12 +424,12 @@ export default {
             formEl.validate((valid, fields) => {
                 if (valid) {
                     console.log(111);
-                    applycota(this.formCota,this.username ).then((res) => {
-                    if(res.data.code===0){
-                        ElMessage.success('申请额度成功')
-                        this.dialogVisible33=false
-                        this.$refs.formRef2.resetFields()
-                    }                        
+                    applycota(this.formCota, this.username).then((res) => {
+                        if (res.data.code === 0) {
+                            ElMessage.success('申请额度成功')
+                            this.dialogVisible33 = false
+                            this.$refs.formRef2.resetFields()
+                        }
                     })
 
                 } else {
@@ -416,19 +439,19 @@ export default {
             )
         }
     },
-    computed (){
-         this.username=store.state.userToken.username 
+    computed() {
+        this.username = store.state.userToken.username
     },
 
     created() {
         apply().then((res) => {
 
             if (res.data.code === 0) {
-                this.list = res.data.applycard       
+                this.list = res.data.applycard
             }
         }),
             greditcard().then((res) => {
-                if (res.data.code === 0) {                  
+                if (res.data.code === 0) {
                     this.greditList = res.data
                 }
             })
@@ -442,7 +465,6 @@ export default {
     ;
 }
 
-.el-tabs__item {
+.el-tabs__item.is-active:hover {
     background: #c7000b !important
-}
-</style>
+}</style>

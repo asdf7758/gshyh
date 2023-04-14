@@ -97,7 +97,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
-    console.log(111);
+    console.log('全局首位已启动');
     store.commit('userToken/updateUsername','15012341234')
     next()
     /* store.dispatch('usersToken/info').then((res) => {
