@@ -55,7 +55,7 @@
 <script>
 import { ElMessage } from 'element-plus'
 import { login } from '../api/users'
-/* import { values } from 'lodash' */
+import { values } from 'lodash'
 export default {
   data() {
     return {
@@ -86,8 +86,8 @@ export default {
               // 添加到状态管理和本地存储中
               // userTokenStore.updateToken(res.data.token)
               ElMessage.success('登录成功')
-              this.$store.commit('usersToken/updateToken',res.data.token)
               this.$router.push('/')
+              // this.$store.commit('usersToken/updateToken',res.data.token)
             }
             else {
               ElMessage.error('登录失败')
