@@ -4,33 +4,28 @@
             <el-header class="tou">
                 <h1><img class="logo" src="../img/logo7.png" alt=""></h1>
                 <h2 class="aaa">个人网上银行</h2>
-                <span @click="toLogin">已有账号? 请登录</span>
             </el-header>
             <el-main>
-                <h3 class="new-user">新用户注册</h3>
+                <h3 class="new-user">个人取款</h3>
                 <el-form ref="ruleFormRef" :model="form" label-width="120px" :rules="rules">
                     <el-form-item label="手机号:" prop="userPhone">
                         <el-input class="nav" v-model="form.userPhone" placeholder="请输入手机号" />
                         <span>请填写本人手机号</span>
                     </el-form-item>
-                    <el-form-item label="用户名:" prop="userName">
-                        <el-input class="nav" v-model="form.userName" placeholder="请输入手机号" />
-                        <span>该用户名将作为登录名</span>
-                    </el-form-item>
-                    <el-form-item label="身份证号:" prop="userIdCard">
-                        <el-input class="nav" v-model="form.userIdCard" placeholder="请输入身份证号" />
-                        <span>请填写本人身份证号，15-18位</span>
-                    </el-form-item>
                     <el-form-item label="真实姓名:" prop="userRealName">
                         <el-input class="nav" v-model="form.userRealName" placeholder="请输入真实姓名" />
                         <span>请填写真实姓名</span>
                     </el-form-item>
-                    <el-form-item label="密码:" prop="userPwd">
-                        <el-input class="nav" v-model="form.userPwd" placeholder="请输入密码" />
-                        <span>请填写密码</span>
+                    <el-form-item label="取款金额:" prop="userGetmoney">
+                        <el-input class="nav" v-model="form.userGetmoney" placeholder="请输入取款金额" />
+                        <span>请填写取款金额</span>
+                    </el-form-item>
+                    <el-form-item label="日期:" prop="userGetmoneyTime">
+                        <el-date-picker v-model="form.userGetmoneyTime" type="datetime" />
+                        <span>请填写日期</span>
                     </el-form-item>
                     <el-form-item class="denglu">
-                        <el-button type="primary" @click="onSubmit($refs.ruleFormRef)">注册</el-button>
+                        <el-button type="primary" @click="onSubmit($refs.ruleFormRef)">申请取款</el-button>
                     </el-form-item>
                 </el-form>
             </el-main>
@@ -67,32 +62,27 @@
 
 <script>
 import { ElMessage } from 'element-plus'
-import { userRed } from '../api/users'
+import { money } from '../api/users'
 import { values } from 'lodash'
 export default {
     data() {
         return {
             form: {
                 userPhone: '',
-                userName: '',
-                userIdCard: '',
-                userPwd: '',
+                userGetmoney: '',
+                userGetmoneyTime: '',
                 userRealName: ''
             },
             rules: {
-                userName: [
-                    { required: true, message: '用户名不能为空', trigger: 'blur' },
+                userGetmoney: [
+                    { required: true, message: '不能为空', trigger: 'blur' },
                 ],
-                userPwd: [
-                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                userGetmoneyTime: [
+                    { required: true, message: '不能为空', trigger: 'blur' },
                 ],
                 userPhone: [
                     { required: true, message: '手机号不能为空', trigger: 'blur' },
                     { pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
-                ],
-                userIdCard: [
-                    { required: true, message: '身份证号不能为空', trigger: 'blur' },
-                    { pattern: /^\d{6}((((((19|20)\d{2})(0[13-9]|1[012])(0[1-9]|[12]\d|30))|(((19|20)\d{2})(0[13578]|1[02])31)|((19|20)\d{2})02(0[1-9]|1\d|2[0-8])|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))0229))\d{3})|((((\d{2})(0[13-9]|1[012])(0[1-9]|[12]\d|30))|((\d{2})(0[13578]|1[02])31)|((\d{2})02(0[1-9]|1\d|2[0-8]))|(([13579][26]|[2468][048]|0[048])0229))\d{2}))(\d|X|x)$/, message: '请输入正确的身份证号', trigger: 'blur' }
                 ],
                 userRealName: [
                     { required: true, message: '真实姓名不能为空', trigger: 'blur' },
@@ -102,24 +92,19 @@ export default {
         }
     },
     methods: {
-        toLogin() {
-            this.$router.push('/login')
-        },
         onSubmit(formEl) {
             if (!formEl) return
             formEl.validate((valid, fields) => {
                 if (valid) {
                     console.log('submit!')
-                    userRed(this.form).then((res) => {
+                    money(this.form).then((res) => {
                         if (res.data.code === 1) {
                             // 添加到状态管理和本地存储中
-                            // userTokenStore.updateToken(res.data.token)
                             ElMessage.success('注册成功')
-                            this.$router.push('/login')
-                            // this.$store.commit('usersToken/updateToken',res.data.token)
+                            this.$router.push('/')
                         }
                         else {
-                            ElMessage.error('登录失败')
+                            ElMessage.error('注册失败')
                         }
                     })
                 } else {
