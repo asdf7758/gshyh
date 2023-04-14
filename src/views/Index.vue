@@ -1,6 +1,13 @@
 <template>
-    <div>
-
+    <div style="position: relative;">
+        <ul class="position">
+            <li>业务咨询</li>
+            <li>立即申请</li>
+            <li>APP下载</li>
+            <li>手机网站</li>
+            <li>安全提示</li>
+            <li class="back">回到顶部</li>
+        </ul>
         <el-container>
             <el-header style="height: 70px;">
                 <ul class="left">
@@ -19,9 +26,9 @@
                 <ul class="right">
                     <li>无障碍浏览</li>
                     <li>全球主站</li>
-                    <li>服务价目表</li>
+                 
                     <li>业务咨询</li>
-                    <li>繁体字EN</li>
+                    <li @click="handleClose">退出登录</li>
                 </ul>
                 <el-input v-model="input2" placeholder="请输入关键字">
 
@@ -67,11 +74,7 @@
                     <el-sub-menu index="3">
                         <template #title>信用卡</template>
                         <el-menu-item index="2-1" @click="handleLogin">我的信用卡</el-menu-item>
-                        <el-menu-item index="2-2">我的信用卡
-
-
-
-                        </el-menu-item>
+                    
                         <el-menu-item index="2-3">信用卡还款</el-menu-item>
                         <el-menu-item index="2-4" @click="handleApplyCard">我要办卡</el-menu-item>
                     </el-sub-menu>
@@ -120,33 +123,7 @@
                     <van-swipe-item>
                         <img src="https://v.icbc.com.cn/userfiles/adresources/771737438250004480.jpg" alt="">
                     </van-swipe-item>
-                </van-swipe>
-
-              <!--   <el-dialog v-model="dialogVisible" width="300">
-                    <h2 style="margin-left: 30px;"> <span>密码登录 </span> <span>扫码登录</span> </h2>
-                    <el-form :model="form" :rules="rules" label-width="50px" ref="formRef" status-icon>
-                        <el-form-item label="账号" prop="telePhone">
-
-
-                            <el-input v-model="form.telePhone" placeholder="请输入手机号 信号卡号 或身份证号" />
-
-                        </el-form-item> 
-
-                        <el-form-item label="密码" prop="password">
-                            <el-input v-model="form.password" placeholder="请输入密码" type="password" />
-                        </el-form-item>
-                    </el-form>
-
-
-                    <input type="checkbox" v-model="checked" />我已阅读 <span style="color: blue; cursor:pointer;"
-                        @click="handleDetail">《电子银行个人客户服务协议》和《工银融e行个人信息保护政策》 </span>
-                    <el-button type="danger" @click="onSubmit($refs.formRef)"
-                        style="width: 250px;;height: 40px;font-weight: bold;margin-top: 10px;">登录
-                    </el-button>
-                    <p style="color: blue; margin-left: 50px    ; "> <span>忘记密码 </span> &nbsp;&nbsp; &nbsp; <span>
-                            立即登录</span> </p>
-
-                </el-dialog> -->
+                </van-swipe>           
 
 
                 <el-dialog v-model="dialogVisible11" title="提示" width="500">
@@ -185,13 +162,23 @@
         </el-container>
 
         <el-footer>
-            <ul>
-                <li>网站声明</li>
-                <li>网站服务</li>
-                <li>分支机构</li>
-                <li>联系我们</li>
-                <li>服务热线</li>
-            </ul>
+           
+<ul>
+    <li>关于我们 |</li>
+    <li>联系我们 |</li>
+    <li>网站声明 |</li>
+    <li>合作招商 |</li>
+    <li>商家帮助 |</li>
+    <li>分支机构 |</li>
+   
+    <li>Media & IR</li>
+</ul>
+
+<p>京公网安备 11000002000088号 | 京ICP备11041704号 | ICP | 互联网药品信息服务资格证编号(京)-经营性-2014-0008 | 新出发京零 字第大120007号</p>
+<p>互联网出版许可证编号新出网证(京)字150号 | 出版物经营许可证 | 网络文化经营许可证京网文[2020]6112-1201号 | 违法和不良信息举报电话：4006561155</p>
+
+
+
 
         </el-footer>
 
@@ -237,6 +224,11 @@ export default {
         handleDetail() {
             this.dialogVisible11 = true
         },
+        handleClose(){
+           //清楚token   跳转登录页
+           this.$router.push('/login')
+           
+        },
         handleClsose() {
             this.dialogVisible11 = false
 
@@ -259,20 +251,44 @@ export default {
     overflow: hidden;
     border-radius: .9375rem;
 }
+.position li{
+    text-align: center;
+    width: 40px;
+    padding:0 9px ;
+    padding-top: 5px;
+    height: 48px;
+    font-size: 15px;
+   
+    border-bottom: 1px solid #ccc;
+}
+.position li:hover{background-color:#c7000b;color: #fff;}
 
-
-
+.position {
+    width: 58px;
+    height: 323px;
+    background:#fff;
+    position: fixed;
+    right: 30px;
+    top: 100px;
+   
+    z-index: 2;
+}
 .left {
     float: left;
     text-align: center;
 }
+.el-footer{background: #999999;height: 130px;}
+.el-footer ul{text-align: center;margin-top: 20px;}
+.el-footer ul li{display: inline-block;font-size: 16px;margin: 5px;text-align: center;}
+.el-footer ul li:hover{color: crimson;}
 
-.left li,
+
 .right li {
     display: inline-block;
-    margin: 0 5px;
+    margin: 0 10px;
     font-size: 15px;
     line-height: 40px;
+    padding: 0 5px;
 }
 
 .right {
@@ -282,7 +298,9 @@ export default {
 
 .left li:hover,
 .right li:hover {
-    color: #c7000b
+       color:#fff;
+       border-radius: 5px;
+    background: #c7000b
 }
 
 .el-header {
