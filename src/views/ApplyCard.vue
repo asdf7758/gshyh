@@ -1,13 +1,14 @@
 <template>
     <div>
-        <div style=";">
+        <div>        
             <img src="../img/未标题-1.png" alt="" style="vertical-align:middle">
             <img src="../img/未标题-2.png" alt="" style="vertical-align:top">
             <span style="float:right">
                 <el-space>
-                    <el-tag class="ml-2" type="danger">万丰银行首页 </el-tag>
-                    <el-tag class="ml-2" type="danger">使用指南 </el-tag>
-                    <el-tag class="ml-2" type="danger">在线客服 </el-tag>
+                    <el-button @click="handleIndex">万丰银行首页</el-button>
+                    <el-button>使用指南</el-button>
+                    <el-button>在线客服</el-button>
+
                 </el-space>
 
                 <p style="margin-right: 20px;font-size: 20px;font-style: italic;font-weight: bold;">
@@ -46,12 +47,12 @@
                 <div>
 
                     <div>
-                        <p>  <span style="font-weight: bold;">
-                            信用额度
-                        </span> 
+                        <p> <span style="font-weight: bold;">
+                                信用额度
+                            </span>
                         <div style="float:right; margin-top: -20px;">
                             <h3>
-                               
+
                                 尊贵的：牡丹超惠系列信用卡用户您好！
                             </h3>
                             <h3> 613***************6511</h3>
@@ -330,6 +331,10 @@ export default {
         showInput() {
             this.dialogVisible = true
         },
+        handleIndex() {
+            console.log(1111);
+            this.$router.push('/')
+        },
         handleDetail() {
             this.dialogVisible11 = true
         },
@@ -465,6 +470,8 @@ export default {
     ;
 }
 
+
 .el-tabs__item.is-active:hover {
     background: #c7000b !important
-}</style>
+}
+</style>
