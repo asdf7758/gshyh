@@ -21,11 +21,18 @@ const applycard = [
 
 const billsearch = [
   { id: '1511515', date: '2023 - 04 - 20', meta: '1314', zdMeta: '1055' },
-  { id: '5151512', date: '2023 - 05 - 20', meta: '1312', zdMeta: '999' },
-  { id: '4544666', date: '2023 - 06 - 20', meta: '1295', zdMeta: '1561' },
-  { id: '5646466', date: '2023 - 08 - 20', meta: '1251', zdMeta: '1561' },
-  { id: '1466666', date: '2023 - 09 - 20', meta: '1214', zdMeta: '1561' },
-  { id: '4684451', date: '2023 - 10 - 20', meta: '1211', zdMeta: '1561' }
+  
+]
+const billsearch1 = [
+  { id: '1511515', date: '2023 - 04 - 20', meta: '1314', },
+  { id: '1511515', date: '2023 - 05 - 20', meta: '1314', },
+  { id: '1511515', date: '2023 - 06 - 20', meta: '1314', },
+  { id: '1511515', date: '2023 - 07 - 20', meta: '1314', },
+  { id: '1511515', date: '2023 - 08 - 20', meta: '1314', },
+  { id: '1511515', date: '2023 - 09 - 20', meta: '1314', },
+  { id: '1511515', date: '2023 - 10 - 20', meta: '1314', },
+  { id: '1511515', date: '2023 - 11 - 20', meta: '1314', },
+  
 ]
 
 
@@ -73,7 +80,16 @@ export default [
       return 'errorcord:0', '提交成功'
     }
   },
-  
+  {
+    url: '/api/fenqi',
+    method: 'post',
+    response: (req) => {
+      return{
+        code: 0,
+        billsearch1
+      } 
+    }
+  },
   {
     url: '/api/users/yzm',
     method: 'get',

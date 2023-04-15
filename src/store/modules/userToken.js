@@ -12,6 +12,9 @@ const state = {
     updateToken(state,payload){
       state.token = payload
     },
+    updateUsername(state,payload){
+      state.username = payload
+    },
   /*   clearToken(state) {
       state.token = ''
   }, */

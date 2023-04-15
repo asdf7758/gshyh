@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div>        
+        <div>
             <img src="../img/未标题-1.png" alt="" style="vertical-align:middle">
             <img src="../img/未标题-2.png" alt="" style="vertical-align:top">
             <span style="float:right">
@@ -75,6 +75,10 @@
                                     </el-form>
                                 </el-dialog>
                             </el-button>
+                            <el-button type="primary" @click="handleFenqi">分期还款 </el-button>
+                            <el-select v-model="value" clearable placeholder="Select">
+                                <el-option v-for="item in options" :key="item.value" :value="item.value" />
+                            </el-select>
 
 
                         </p>
@@ -85,15 +89,17 @@
 
                 <hr>
                 <ul style="margin-top: 30px  ;">
-                    <li v-for="item, index in greditList.billsearch" :key="item.id"
+                    <li v-for="item, index in billsearch" :key="item.id"
                         style="border-bottom: 1px solid  #ccc;width: 700px;margin: 0 auto;margin-top: 10px  ;">
                         <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 待还金额：{{ item.meta }}
                         </span>
                         <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 还款日： {{ item.date }}
                         </span>
-                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 最低还款：{{ item.zdMeta
+                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> {{ zuiDi }} {{
+                            item.zdMeta
                         }} </span>
                         <el-button type="primary" @click="handleGredit(index)">立即还款 </el-button>
+
 
                     </li>
 
@@ -247,7 +253,7 @@
 
 <script>
 
-import { apply, submitCard, sendYzm, greditcard, payMoney, applycota } from '../api/users'
+import { apply, submitCard, sendYzm, greditcard, payMoney, applycota, fenqi } from '../api/users'
 import { ElMessage } from 'element-plus'
 import store from '../store'
 
@@ -264,10 +270,18 @@ export default {
             dialogVisible33: false,
             disYzm: false,
             username: '',
+            zuiDi:'最低还款',
+            value: '',
+            options: [{ value: '1月' }, { value: '2月' }, { value: '3月' }, { value: '4月' }, { value: '5月' }, { value: '6月' }, { value: '7月' }, { value: '8月' }, { value: '9月' }, { value: '10月' }, { value: '11月' }, { value: '12月' },
+
+
+            ],
             id: '',
             active: '',
 
             greditList: [],
+            billsearch: [],
+
             form: {
                 name: '',
                 idCard: '',
@@ -422,6 +436,24 @@ export default {
             console.log(this.$store.state.userToken.username);
             this.dialogVisible33 = true
         },
+        //分期
+        handleFenqi() {
+            if (this.greditList.billsearch.length !== 0) {
+                console.log(this.value);
+                fenqi(this.value).then((res) => {
+                    if (res.data.code === 0) {
+                        console.log(res);
+                        this.billsearch = res.data.billsearch1
+                        this.zuiDi=''
+                    }
+                })
+            } else {
+                ElMessage.success('没有可分期的贷款')
+            }
+        },
+
+
+
 
         //提交申请额度
         handleSubmitCode(formEl) {
@@ -446,6 +478,7 @@ export default {
     },
     computed() {
         this.username = store.state.userToken.username
+
     },
 
     created() {
@@ -458,6 +491,7 @@ export default {
             greditcard().then((res) => {
                 if (res.data.code === 0) {
                     this.greditList = res.data
+                    this.billsearch = this.greditList.billsearch
                 }
             })
     }
