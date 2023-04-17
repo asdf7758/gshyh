@@ -15,12 +15,6 @@ function login(data) {
 function loginCard(data) {
   return http.post('/login/card', data)
 }
-
-// 校验token，返回用户信息
-// 很多个接口都需要携带token，所以不用一个一个去传递，可以通过请求头携带token
-function info() {
-  return http.get('/users/info')
-}
 //申请信用卡类型信息
 function apply() {              
   return http.get('/apply')
@@ -31,6 +25,14 @@ function apply() {
 
 
  }
+//分期
+
+function fenqi(data){
+  return http.post('/fenqi',data)
+
+
+ }
+
  // 信用卡还款
 
  function  payMoney(data){
@@ -51,17 +53,30 @@ function apply() {
 function submitCard() {              
   return http.post('/submit/card')
 }
-
+function userRed(data) {
+  return http.post('/user/userreg', data)
+}
+// 校验token，返回用户信息
+// 很多个接口都需要携带token，所以不用一个一个去传递，可以通过请求头携带token
+function info(data) {
+  return http.get('/users/info',data)
+}
+//存钱
+function money(data) {
+  return http.post('/userGetM/userget',data)
+}
 
 export {
   sendYzm,
-  login,
   info,
   apply,
   submitCard,
   loginCard,
   greditcard,
   payMoney,
-  applycota
-
+  applycota,
+  login,
+  userRed,
+  money,
+  fenqi
 }

@@ -4,33 +4,27 @@
             <el-header class="tou">
                 <h1><img class="logo" src="../img/logo7.png" alt=""></h1>
                 <h2 class="aaa">个人网上银行</h2>
-                <span @click="toLogin">已有账号? 请登录</span>
             </el-header>
             <el-main>
-                <h3 class="new-user">新用户注册</h3>
+                <h3 class="new-user">个人取款</h3>
                 <el-form ref="ruleFormRef" :model="form" label-width="120px" :rules="rules">
                     <el-form-item label="手机号:" prop="userPhone">
                         <el-input class="nav" v-model="form.userPhone" placeholder="请输入手机号" />
                         <span>请填写本人手机号</span>
                     </el-form-item>
-                    <el-form-item label="用户名:" prop="userName">
-                        <el-input class="nav" v-model="form.userName" placeholder="请输入手机号" />
-                        <span>该用户名将作为登录名</span>
-                    </el-form-item>
-                    <el-form-item label="身份证号:" prop="userIdCard">
-                        <el-input class="nav" v-model="form.userIdCard" placeholder="请输入身份证号" />
-                        <span>请填写本人身份证号，15-18位</span>
-                    </el-form-item>
                     <el-form-item label="真实姓名:" prop="userRealName">
                         <el-input class="nav" v-model="form.userRealName" placeholder="请输入真实姓名" />
                         <span>请填写真实姓名</span>
                     </el-form-item>
-                    <el-form-item label="密码:" prop="userPwd">
-                        <el-input class="nav" v-model="form.userPwd" placeholder="请输入密码" />
-                        <span>请填写密码</span>
+                    <el-form-item label="取款金额:" prop="userGetmoney">
+                        <el-input class="nav" v-model="form.userGetmoney" placeholder="请输入取款金额" />
+                        <span>请填写取款金额</span>
+                    </el-form-item>
+                    <el-form-item label="日期:" prop="userGetmoneyTime">
+                        <el-date-picker v-model="form.userGetmoneyTime" type="datetime" placeholder="请选择取款日期时间" />
                     </el-form-item>
                     <el-form-item class="denglu">
-                        <el-button type="primary" @click="onSubmit($refs.ruleFormRef)">注册</el-button>
+                        <el-button type="primary" @click="onSubmit($refs.ruleFormRef)">申请取款</el-button>
                     </el-form-item>
                 </el-form>
             </el-main>
@@ -67,32 +61,27 @@
 
 <script>
 import { ElMessage } from 'element-plus'
-import { userRed } from '../api/users'
+import { money } from '../api/users'
 import { values } from 'lodash'
 export default {
     data() {
         return {
             form: {
                 userPhone: '',
-                userName: '',
-                userIdCard: '',
-                userPwd: '',
+                userGetmoney: '',
+                userGetmoneyTime: '',
                 userRealName: ''
             },
             rules: {
-                userName: [
-                    { required: true, message: '用户名不能为空', trigger: 'blur' },
+                userGetmoney: [
+                    { required: true, message: '不能为空', trigger: 'blur' },
                 ],
-                userPwd: [
-                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                userGetmoneyTime: [
+                    { required: true, message: '不能为空', trigger: 'blur' },
                 ],
                 userPhone: [
                     { required: true, message: '手机号不能为空', trigger: 'blur' },
                     { pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
-                ],
-                userIdCard: [
-                    { required: true, message: '身份证号不能为空', trigger: 'blur' },
-                    { pattern: /^\d{6}((((((19|20)\d{2})(0[13-9]|1[012])(0[1-9]|[12]\d|30))|(((19|20)\d{2})(0[13578]|1[02])31)|((19|20)\d{2})02(0[1-9]|1\d|2[0-8])|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))0229))\d{3})|((((\d{2})(0[13-9]|1[012])(0[1-9]|[12]\d|30))|((\d{2})(0[13578]|1[02])31)|((\d{2})02(0[1-9]|1\d|2[0-8]))|(([13579][26]|[2468][048]|0[048])0229))\d{2}))(\d|X|x)$/, message: '请输入正确的身份证号', trigger: 'blur' }
                 ],
                 userRealName: [
                     { required: true, message: '真实姓名不能为空', trigger: 'blur' },
@@ -102,42 +91,29 @@ export default {
         }
     },
     methods: {
-        toLogin() {
-            this.$router.push('/login')
-        },
         onSubmit(formEl) {
             if (!formEl) return
             formEl.validate((valid, fields) => {
                 if (valid) {
                     console.log('submit!')
-                    userRed(this.form).then((res) => {
-                        if (res.data.code === 1) {
-                            // 添加到状态管理和本地存储中
-                            // userTokenStore.updateToken(res.data.token)
-                            ElMessage.success('注册成功')
-                            this.$router.push('/login')
-                            // this.$store.commit('usersToken/updateToken',res.data.token)
-                        }
-                        else {
-                            ElMessage.error('登录失败')
-                        }
-                    })
+                    if (this.form.userGetmoney >= 10000) {
+                        money(this.form).then((res) => {
+                            if (res.data.code === 1) {
+                                // 添加到状态管理和本地存储中
+                                ElMessage.success('注册成功')
+                                this.$router.push('/')
+                            }
+                            else {
+                                ElMessage.error('注册失败')
+                            }
+                        })
+                    } else {
+                        ElMessage.error('本行只支持一万以上的取款')
+                    }
                 } else {
                     console.log('error submit!', fields)
                 }
             })
-        },
-        baoxian() {
-            this.$router.push('/baoxian')
-        },
-        handleOperation() {
-            this.$router.push('/operation')
-        },
-        handleProblem() {
-            this.$router.push('/problem')
-        },
-        handleSafety() {
-            this.$router.push('/safety')
         }
     }
 }
@@ -156,7 +132,7 @@ export default {
 .el-main {
     width: 100%px;
     height: 500px;
-    background: url(../img/register.png) no-repeat 50%;
+    background: url(../img/存款.webp) no-repeat 50%;
     background-size: cover;
 }
 
@@ -207,14 +183,15 @@ export default {
 
 .el-form {
     display: inline-block;
-    /* width: 100%; */
-    /* height: 24.375rem; */
+    /* width: 500px; */
+    height: 24.375rem;
     padding: 0;
     /* margin: 5rem 1.875rem 3.125rem; */
     text-align: center;
-    /* background: hsla(0, 0%, 100%, .8); */
+    background: hsla(0, 0%, 100%, .8);
     border-radius: 0.625rem;
-    margin-top: 20px;
+    /* margin-top: 20px; */
+    margin-left: 700px;
 
 }
 
@@ -223,7 +200,7 @@ export default {
     justify-content: space-between;
     margin: 10px;
     /* margin-top: 40px; */
-    margin-left: 550px;
+    /* margin-left: 550px; */
     margin-top: 30px;
 }
 
@@ -234,17 +211,19 @@ export default {
 }
 
 .denglu {
-    width: 100%;
+    /* width: 100%; */
     /* background: wheat; */
-    margin: 0 auto;
+    /* margin: 0 auto; */
     margin-top: 30px;
-    margin-left: 250px;
+    margin-right:100px;
+
+    /* margin-left: 250px; */
 }
 
 .el-button {
     width: 170px;
-    margin: auto;
-    margin-left: 370px;
+    /* margin: auto; */
+    /* margin-left: 370px; */
     margin-bottom: 20px;
 }
 

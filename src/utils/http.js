@@ -4,8 +4,8 @@ import store from '../store'
 
 const instance = axios.create({
   baseURL: '/api',
-    timeout: 5000
-  });
+  timeout: 5000
+});
                      
   // 添加请求拦截器->携带用户身份token
   instance.interceptors.request.use(function (config) {
@@ -28,7 +28,7 @@ instance.interceptors.response.use(function (response) {
     return Promise.reject(error);
   });
 
-  let http = {
+  const http = {
     get(url,data,config){
         return instance.get(url,{
             params:data,
