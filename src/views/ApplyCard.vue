@@ -484,6 +484,7 @@ export default {
     created() {
         apply().then((res) => {
 
+            console.log(res);
             if (res.data.code === 0) {
                 this.list = res.data.applycard
             }
