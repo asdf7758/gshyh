@@ -221,7 +221,7 @@ export default {
             this.$router.push('/applycard')
         },
         handleDetail(){
-          this.$router.push('/applicationdetail')
+          this.$router.push('/loanlist')
         },
       
      

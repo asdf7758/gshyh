@@ -1,6 +1,6 @@
 <template>
   <div class="big-box">
-    <h3>贷款申请表</h3>
+    <h3>贷款申请表 <el-button @click="handlerepayment">还款列表 </el-button>    </h3>
     <p class="prompt-language">* 请真实填写以下信息，我行将根据您提供的信息对您的贷款申请业务进行审核</p>
     <hr class="break-up">
     <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px"
@@ -271,6 +271,9 @@ export default {
     resetForm() {
       this.$refs['elFxorm'].resetFields()
     },
+    handlerepayment(){
+      this.$router.push('/repayment')
+    }
   }
 }
 
