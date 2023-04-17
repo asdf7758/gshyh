@@ -114,7 +114,6 @@ export default [
       return {
         code: 0,
 
-        applycard
 
       }
 
@@ -146,6 +145,59 @@ export default [
 
       }
 
+    },
+  },
+  {
+    url: '/api/userloan/selectAllByUserId/4',
+    method: 'get',
+    response: (req, res) => {
+      return {
+        "code": 0,
+        "msg": "操作成功",
+        "data":[
+          {
+            "userLoanId":"2",
+            "userId": 1,
+            "userLoanTypeLimit": 36,
+            "userLoanTypeTarget": "商业贷款",
+            "userLoanAmount": 6000.0,
+            "userLoanMonth": 6,
+            "loanRateId": null,
+            "userLoanRate": 0.056,
+            "userLoanInterest": 1,
+            "examine": "是",
+            "userLoanPaid": 2500.0,
+            "userLoanUnPaid": 3500.0,
+            "userLoanMonthPay": 300,
+            "userWork":"国家电网",
+            "userIncome": 5500.0,
+            "userLoanDate": "2022-3-15",
+            "status": "申请中"
+          }
+        ]
+      }
+    },
+  },
+  {
+    url: '/api/userloan/repaymentList',
+    method: 'get',
+    response: (req, res) => {
+      return {
+        "code": 0,
+        "msg": "操作成功",
+        "data":[
+          {
+            "userLoanId": "12121212",
+            "userLoanDate": "2023.1.26",
+            "userLoanAmount": "300000",
+            "userLoanUnPaid": "260000",
+            "userLoanMonthPay": "4000",
+            "status": "还款中",
+            "remainLoanMonth": "21",
+            "userLoanInterest": "200"
+          }
+        ]
+      }
     },
   },
 ]

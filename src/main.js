@@ -5,6 +5,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import store from './store'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 import vant from 'vant'
 import 'vant/lib/index.css';
@@ -17,7 +18,9 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 
 app.use(router)
-app.use(ElementPlus)
+app.use(ElementPlus,{
+    locale: zhCn,
+})
 app.use(vant)
 app.use(store)
 app.mount('#app')
