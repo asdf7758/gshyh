@@ -393,7 +393,7 @@ export default {
                             ElMessage.success('提交成功')
                             this.$refs.formRef1.resetFields()
                             this.dialogVisible22 = false
-                            this.greditList.billsearch.splice(index, 1)
+                            this.billsearch.splice(index, 1)
                         }
                     })
                 } else {
