@@ -9,19 +9,21 @@ const SubmitSuccess = () => import('../views/userloan/SubmitSuccess.vue')
 const ApplicationDetail = () => import('../views/userloan/ApplicationDetail.vue')
 const Message = () => import('../views/Message.vue')
 const Bill = () => import('../views/Bill.vue')
+const message = () => import('../views/message.vue')
 const ApplyCard = () => import('../views/ApplyCard.vue')
 const Baoxian = () => import('../views/Baoxian.vue')
 const Register = () => import('../views/Register.vue')
 const Operation = () => import('../views/Operation.vue')
+const LoanForm = () => import('../views/userloan/LoanForm.vue')
+const Repayment = () => import('../views/userloan/Repayment.vue')
+const LoanList = () => import('../views/userloan/LoanList.vue')
 const Getmoney = () => import('../views/Getmoney.vue')
 const Problem = ()=>import('../views/Problem.vue')
 const Safety = ()=>import('../views/Safety.vue')
 
-
-
-ApplicationDetail
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+
   routes: [
     {
       path: '/',
@@ -87,20 +89,16 @@ const router = createRouter({
         auth:false
       } */
     }
-    , {
-      path: '/userloan',
-      name: 'userLoanindex',
-      component: UserLoan
-    },
+    ,
     {
       path: '/loanform',
-      name: 'loanApplicationForm',
-      component: LoanApplicationForm
+      name: 'loanForm',
+      component: LoanForm
     },
     {
-      path: '/submitsuccess',
-      name: 'submitSuccess',
-      component: SubmitSuccess
+      path: '/repayment',
+      name: 'repayment',
+      component: Repayment
     },
     {
       path: '/applicationdetail',
@@ -119,6 +117,11 @@ const router = createRouter({
           component:Bill,
         }
       ]
+    },
+    {
+      path: '/loanlist',
+      name: 'loanList',
+      component: LoanList
     }
 
   ]
