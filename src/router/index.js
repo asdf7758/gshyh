@@ -7,7 +7,8 @@ const UserLoan = () => import('../views/userloan/Index.vue')
 const LoanApplicationForm = () => import('../views/userloan/LoanApplicationForm.vue')
 const SubmitSuccess = () => import('../views/userloan/SubmitSuccess.vue')
 const ApplicationDetail = () => import('../views/userloan/ApplicationDetail.vue')
-const message = () => import('../views/message.vue')
+const Message = () => import('../views/Message.vue')
+const Bill = () => import('../views/Bill.vue')
 const ApplyCard = () => import('../views/ApplyCard.vue')
 const Baoxian = () => import('../views/Baoxian.vue')
 const Register = () => import('../views/Register.vue')
@@ -110,7 +111,14 @@ const router = createRouter({
     {
       path: '/message',
       name: 'message',
-      component: message
+      component: Message,
+      children:[
+        {
+          path:'bill',
+          name:'bill',
+          component:Bill,
+        }
+      ]
     }
 
   ]

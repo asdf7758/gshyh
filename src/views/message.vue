@@ -1,61 +1,78 @@
 <template>
+    <div class="common-layout">
     <el-container>
-        <el-header>
-            <h2>个人资料</h2>
-            <div class="user-info">
-                <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
-                <el-dropdown>
-                    <span>
-                        欢迎：小轩轩
-                        <el-icon class="el-icon--right">
-                            <arrow-down />
-                        </el-icon>
-                    </span>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item>个人中心</el-dropdown-item>
-                            <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
-                        </el-dropdown-menu>
+      <el-header>
+        <div>
+            <img class="logo" src="../img/logo7.png" alt="" style="width: 118px;">
+            <h2 style="display: inline-block; vertical-align:top">个人信息</h2>
+        </div>
+        <div class="user-info">
+          <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+          <el-dropdown>
+            <span>
+              欢迎：小轩轩
+              <el-icon class="el-icon--right">
+                <arrow-down />
+              </el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>个人中心</el-dropdown-item>
+                <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+      </el-header>
+      <el-main>
+        <el-tabs v-model="tabActive" type="border-card" @tab-click="hangleBill">
+            <el-tab-pane label="个人信息" name="/message">
+                <el-descriptions
+                    title="银行用户信息"
+                    direction="vertical"
+                    :column="2"
+                    border
+                >
+                    <template #extra>
+                        <el-button type="primary" icon="Edit" @click="handleDialog">修改个人信息</el-button>
                     </template>
-                </el-dropdown>
-            </div>
-        </el-header>
-        <el-main>
-            <div class="person-head">
-                <el-button type="primary" icon="Edit" @click="handleDialog">修改</el-button>
-            </div>
-            <el-table :data="tableData" style="width: 100%" height="250">
-                <el-table-column fixed prop="cardNumber" label="卡号" width="150" />
-                <el-table-column prop="name" label="姓名" width="120" />
-                <el-table-column prop="gender" label="性别" width="80" />
-                <el-table-column prop="job" label="职业" width="120" />
-                <el-table-column prop="phone" label="手机号" width="120" />
-                <el-table-column prop="cardID" label="身份证号" width="200" />
-                <el-table-column prop="address" label="地址" width="120" />
-            </el-table>
-            <el-dialog v-model="dialogVisible" title="提示" width="500">
-                <el-form :model="tableData" :rules="rules" ref="formRef" label-width="90px" status-icon>
-                    <el-form-item label="职业类型" prop="title">
-                        <el-select style="width: 100%" v-model="tableData.job" placeholder="请选择职业类型">
-                            <el-option label="学生" value="学生" />
-                            <el-option label="教师" value="教师" />
-                            <el-option label="工人" value="工人" />
-                            <el-option label="程序员" value="程序员" />
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="地址" prop="info">
-                        <el-input v-model="form.info" type="textarea" :rows="4" />
-                    </el-form-item>
-                </el-form>
-                <template #footer>
-                    <span class="dialog-footer">
-                        <el-button @click="onReset($refs.formRef)">重置</el-button>
-                        <el-button type="primary" @click="onSubmit($refs.formRef)">添加</el-button>
-                    </span>
-                </template>
-            </el-dialog>
-        </el-main>
+                    <el-descriptions-item label="姓名">小轩轩</el-descriptions-item>
+                    <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
+                    <el-descriptions-item label="卡号" >6225123456788</el-descriptions-item>
+                    <el-descriptions-item label="性别" >女</el-descriptions-item>
+                    <el-descriptions-item label="身份证号" >410102200010072389</el-descriptions-item>
+                    <el-descriptions-item label="出生年月日" >2000-10-07</el-descriptions-item>
+                    <el-descriptions-item label="地址">
+                        辽宁省大连市高新园区
+                    </el-descriptions-item>
+                </el-descriptions>
+                <el-dialog v-model="dialogVisible" title="提示" width="500">
+                    <span class="perInfo">其他信息根据用户实名获取，如需更改，请拿身份证自行到银行办理</span>
+                    <el-form :model="form" :rules="rules" ref="formRef" label-width="90px" status-icon>
+                        <el-form-item label="手机号" prop="userPhone">
+                            <el-input v-model="form.userPhone"/>
+                        </el-form-item>
+                        <el-form-item label="地址" prop="jobAddress">
+                            <el-input  type="textarea" v-model="form.jobAddress" :rows="4" />
+                        </el-form-item>
+                    </el-form>
+                    <template #footer>
+                        <span class="dialog-footer">
+                            <el-button @click="onReset($refs.formRef)">重置</el-button>
+                            <el-button type="primary" @click="onSubmit($refs.formRef)">添加</el-button>
+                        </span>
+                    </template>
+                </el-dialog>
+            </el-tab-pane>
+            <el-tab-pane label="账单" name="/message/bill">
+                <RouterView />
+            </el-tab-pane>
+            <!-- <el-tab-pane label="Role" name="Role">aaaa</el-tab-pane> -->
+        </el-tabs>
+        
+      </el-main>
     </el-container>
+  </div>
 </template>
 
 <script>
@@ -74,21 +91,14 @@ export default {
                     address: '辽宁省沈阳市',
                 },
             ],
+            form: {
+                userPhone:'',
+                jobAddress:'',
+            },
             dialogVisible: false,
             rules:{
-                name: [
-                    { required: true, message: '菜品名称不能为空', trigger: 'blur' },
-                ],
-                title: [
-                    { required: true, message: '菜品分类不能为空', trigger: 'blur' },
-                ],
-                price: [
-                    { required: true, message: '价格不能为空', trigger: 'blur' },
-                ],
-                info: [
-                    { required: true, message: '描述不能为空', trigger: 'blur' },
-                ],
-            }
+            },
+            tabActive: this.$route.path
         }
     },
     components: {
@@ -96,6 +106,10 @@ export default {
     created() {
     },
     methods: {
+        onReset(formEl) {
+            console.log(this.form)
+            formEl.resetFields()
+        },
         handleLogout() {
             // location.href = '/login'
         },
@@ -106,26 +120,26 @@ export default {
             if (!formEl) return
             formEl.validate((valid, fields) => {
                 if (valid) {
-                    // console.log('submit!', form)
-                    updateShop({ dynamictags: dynamictags.value, username: userTokenStore.username }).then((res) => {
-                        if (res.data.errcode === 0) {
-                            activeName.value = form.title
-                            dialogVisible.value = false
-                            this.$refs.formRef.resetFields()
-                            ElMessage.success('添加成功')
-                        }
-                        else {
-                            ElMessage.error('添加失败')
-                        }
-                    })
+                    console.log('submit!')
+                    // updateShop({ dynamictags: dynamictags.value, username: userTokenStore.username }).then((res) => {
+                    //     if (res.data.errcode === 0) {
+                    //         activeName.value = form.title
+                    //         dialogVisible.value = false
+                    //         this.$refs.formRef.resetFields()
+                    //         ElMessage.success('添加成功')
+                    //     }
+                    //     else {
+                    //         ElMessage.error('添加失败')
+                    //     }
+                    // })
                 } else {
                     console.log('error submit!', fields)
                 }
             })
             this.dialogVisible = false
         },
-        onReset(formEl) {
-            formEl.resetFields()
+        hangleBill(res){
+            this.$router.push(res.paneName)
         }
     }
 }
@@ -133,14 +147,30 @@ export default {
 
 <style lang="scss" scoped>
 .el-header {
-    background: red;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+}
+.user-info span {
+  margin-left: 10px;
+  cursor: pointer;
+  outline: none;
+}
+.perInfo{
+    font-weight:bold;
+    display: block;
+    margin-bottom: 10px;
 }
 
-.person-head {
+.el-main{
+    width: 960px;
+    margin: auto;
+}
+/* .person-head {
     display: flex;
     justify-content: right;
 }
@@ -154,6 +184,5 @@ export default {
     margin-left: 10px;
     cursor: pointer;
     outline: none;
-    color: white;
-}
+} */
 </style>
