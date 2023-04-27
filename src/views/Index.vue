@@ -81,10 +81,9 @@
 
                     <el-sub-menu index="4">
                         <template #title>用户服务</template>
-                        <el-menu-item index="2-1">item one</el-menu-item>
-                        <el-menu-item index="2-2">item two</el-menu-item>
-                        <el-menu-item index="2-3">item three</el-menu-item>
-                        <el-menu-item index="2-4">item three</el-menu-item>
+                        <el-menu-item index="2-1"  @click="handleMessege">个人信息</el-menu-item>
+                        <el-menu-item index="2-2"  @click="handleBill">个人账单</el-menu-item>
+                       
 
 
 
@@ -223,8 +222,12 @@ export default {
         handleDetail(){
           this.$router.push('/loanlist')
         },
-      
-     
+        handleMessege(){
+            this.$router.push('/message')
+        },
+        handleBill(){
+            this.$router.push('/message/bill')
+        },
         handleClose(){
            //清楚token   跳转登录页
            this.$router.push('/login')
