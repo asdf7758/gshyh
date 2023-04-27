@@ -25,6 +25,14 @@ function apply() {
 
 
  }
+//分期
+
+function fenqi(data){
+  return http.post('/fenqi',data)
+
+
+ }
+
  // 信用卡还款
 
  function  payMoney(data){
@@ -70,5 +78,6 @@ export {
   applycota,
   login,
   userRed,
-  money
+  money,
+  fenqi
 }

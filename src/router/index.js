@@ -3,24 +3,27 @@ import store from '../store'
 
 const Login = () => import('../views/Login.vue')
 const Index = () => import('../views/Index.vue')
-const UserLoan = () => import('../views/userloan/Index.vue')
-const LoanApplicationForm = () => import('../views/userloan/LoanApplicationForm.vue')
-const SubmitSuccess = () => import('../views/userloan/SubmitSuccess.vue')
-const ApplicationDetail = () => import('../views/userloan/ApplicationDetail.vue')
 const message = () => import('../views/message.vue')
+// const UserLoan = () => import('../views/userloan/Index.vue')
+// const LoanApplicationForm = () => import('../views/userloan/LoanApplicationForm.vue')
+// const SubmitSuccess = () => import('../views/userloan/SubmitSuccess.vue')
+// const ApplicationDetail = () => import('../views/userloan/ApplicationDetail.vue')
+const Message = () => import('../views/Message.vue')
+const Bill = () => import('../views/Bill.vue')
 const ApplyCard = () => import('../views/ApplyCard.vue')
 const Baoxian = () => import('../views/Baoxian.vue')
 const Register = () => import('../views/Register.vue')
 const Operation = () => import('../views/Operation.vue')
+const LoanForm = () => import('../views/userloan/LoanForm.vue')
+const Repayment = () => import('../views/userloan/Repayment.vue')
+const LoanList = () => import('../views/userloan/LoanList.vue')
 const Getmoney = () => import('../views/Getmoney.vue')
 const Problem = () => import('../views/Problem.vue')
 const Safety = () => import('../views/Safety.vue')
 
-
-
-ApplicationDetail
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+
   routes: [
     {
       path: '/',
@@ -99,31 +102,40 @@ const router = createRouter({
         auth: false
       }
     }
-    , {
-      path: '/userloan',
-      name: 'userLoanindex',
-      component: UserLoan
-    },
-    {
-      path: '/loanform',
-      name: 'loanApplicationForm',
-      component: LoanApplicationForm
-    },
-    {
-      path: '/submitsuccess',
-      name: 'submitSuccess',
-      component: SubmitSuccess
-    },
-    {
-      path: '/applicationdetail',
-      name: 'applicationDetail',
-      component: ApplicationDetail
-    }
     ,
     {
       path: '/message',
       name: 'message',
       component: message
+    },
+    {
+      path: '/loanform',
+      name: 'loanForm',
+      component: LoanForm
+    },
+    {
+      path: '/repayment',
+      name: 'repayment',
+      component: Repayment
+    },
+    
+    ,
+    {
+      path: '/message',
+      name: 'message',
+      component: Message,
+      children:[
+        {
+          path:'bill',
+          name:'bill',
+          component:Bill,
+        }
+      ]
+    },
+    {
+      path: '/loanlist',
+      name: 'loanList',
+      component: LoanList
     }
 
   ]
