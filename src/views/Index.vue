@@ -66,8 +66,8 @@
                     <el-sub-menu index="2">
                         <template #title>存款与贷款</template>
                         <el-menu-item index="2-1" @click="handleDetail">贷款申请页</el-menu-item>
-                        <el-menu-item index="2-2">我的贷款</el-menu-item>
-                        <el-menu-item index="2-3">申请贷款</el-menu-item>
+                        <el-menu-item index="2-2" @click="handlerepayment">还款列表</el-menu-item>
+                       
                     
                     </el-sub-menu>
 
@@ -236,6 +236,9 @@ export default {
         handleClsose() {
             this.dialogVisible11 = false
 
+        },
+        handlerepayment(){
+            this.$router.push('/repayment')
         }
     }
 }
