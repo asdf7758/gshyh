@@ -1,5 +1,3 @@
-
-
 import http from "../utils/http";
 
 //发送验证码
@@ -9,7 +7,9 @@ function sendYzm() {
 
 //登录
 function login(data) {
-  return http.post('/users/login', data)
+  return http.post('/user/userlogin', data)
+  // /login
+  // /user/userlogin
 }
 //信用卡登录
 function loginCard(data) {
@@ -45,6 +45,7 @@ function apply() {
 function submitCard() {              
   return http.post('/submit/card')
 }
+//注册
 function userRed(data) {
   return http.post('/user/userreg', data)
 }

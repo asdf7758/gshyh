@@ -3,7 +3,7 @@ import userToken from './modules/userToken'
 import createPersistedState from "vuex-persistedstate";
 const store = createStore({
   modules: {
-    // userToken
+    userToken
   },
   plugins: [createPersistedState({
     paths:['userToken.token']

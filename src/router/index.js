@@ -13,8 +13,8 @@ const Baoxian = () => import('../views/Baoxian.vue')
 const Register = () => import('../views/Register.vue')
 const Operation = () => import('../views/Operation.vue')
 const Getmoney = () => import('../views/Getmoney.vue')
-const Problem = ()=>import('../views/Problem.vue')
-const Safety = ()=>import('../views/Safety.vue')
+const Problem = () => import('../views/Problem.vue')
+const Safety = () => import('../views/Safety.vue')
 
 
 
@@ -27,19 +27,23 @@ const router = createRouter({
       name: 'index',
       component: Index,
       meta: {
-        auth: false
+        auth: true
       }
     }, {
       path: '/login',
       name: 'login',
-
       component: Login,
-
+      meta: {
+        auth: false
+      }
     },
     {
       path: '/register',
       name: 'register',
       component: Register,
+      meta: {
+        auth: false
+      }
 
     },
     {
@@ -63,6 +67,9 @@ const router = createRouter({
       path: '/operation',
       name: 'operation',
       component: Operation,
+      meta:{
+        auth:false
+      }
 
     },
     ,
@@ -70,21 +77,27 @@ const router = createRouter({
       path: '/problem',
       name: 'problem',
       component: Problem,
+      meta:{
+        auth:false
+      }
 
     },
     {
       path: '/safety',
       name: 'safety',
       component: Safety,
+      meta: {
+        auth: false
+      }
 
     },
     {
       path: '/baoxian',
       name: 'baoxian',
       component: Baoxian,
-      /* meta:{
-        auth:false
-      } */
+      meta: {
+        auth: false
+      }
     }
     , {
       path: '/userloan',
@@ -118,8 +131,23 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
+    console.log(1111)
+    store.dispatch('userToken/info').then((res) => {
+      console.log(res);
+      if (res.data.code === 0) {  //token校验成功
+        next()
+      }
+      else {  //token校验失败
+        next('/login')
+      }
+    })
+  }
+  else {
+    next()
+  }
+  if (to.meta.auth) {
     console.log('全局首位已启动');
-    store.commit('userToken/updateUsername','15012341234')
+    store.commit('userToken/updateUsername', '15012341234')
     console.log(111);
     // store.commit('userToken/updateUsername','15012341234')
     next()

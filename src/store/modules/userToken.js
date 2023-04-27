@@ -1,20 +1,21 @@
 //用户的状态管理
+import http from "../../utils/http"
 const state = {
-    // token:''
+    token:''
   }
   const actions = {//同步
-    // info(context, data){
-    //   return http.get('/login', data)
-    // }
+    info(context, data){
+      return http.get('/user/userselect', data)
+    }
   }
   const getters = {}
   const mutations = {
     updateToken(state,payload){
       state.token = payload
     },
-  /*   clearToken(state) {
+    clearToken(state) {
       state.token = ''
-  }, */
+  },
   }
    
   export default {
