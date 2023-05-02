@@ -3,7 +3,6 @@ import store from '../store'
 
 const Login = () => import('../views/Login.vue')
 const Index = () => import('../views/Index.vue')
-const message = () => import('../views/message.vue')
 // const UserLoan = () => import('../views/userloan/Index.vue')
 // const LoanApplicationForm = () => import('../views/userloan/LoanApplicationForm.vue')
 // const SubmitSuccess = () => import('../views/userloan/SubmitSuccess.vue')
@@ -103,11 +102,6 @@ const router = createRouter({
       }
     }
     ,
-    {
-      path: '/message',
-      name: 'message',
-      component: message
-    },
     {
       path: '/loanform',
       name: 'loanForm',

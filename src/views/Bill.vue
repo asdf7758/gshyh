@@ -12,7 +12,7 @@
         <el-button @click="handConfirm" type="primary" style="float: right;">
             确定选择
         </el-button>
-        <el-dialog v-model="centerDialogVisible" title="收支" width="40%" style="margin-top: 10%;">
+        <el-dialog v-model="centerDialogVisible" title="时间" width="40%" style="margin-top: 10%;">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleTabTime">
                 <el-tab-pane label="月份选择" name="first">
                     <div class="demo-date-picker">
