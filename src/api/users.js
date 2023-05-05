@@ -4,7 +4,7 @@ import http from "../utils/http";
 
 //发送验证码
 function sendYzm() {
-  return http.get('/users/yzm')
+  return http.get('/ccard/yzm')
 }
 
 //登录
@@ -17,12 +17,11 @@ function loginCard(data) {
 }
 //申请信用卡类型信息
 function apply() {              
-  return http.get('/apply')
+  return http.get('/ccardtype/selectall')
 }
 //信用卡个人信息
- function greditcard(data){
-  return http.post('/gredit/card',data)
-
+ function greditcard(){
+  return http.get('/ccard/show')
 
  }
 //分期
@@ -44,14 +43,13 @@ function fenqi(data){
 //申请额度
 
  function applycota(data){
-
-  return http.post('/apply/cota',data)
+  return http.post('/ccard/withdraw',data)
  }
 
 
 //提交信用卡信息
-function submitCard() {              
-  return http.post('/submit/card')
+function submitCard(data) {              
+  return http.post('/ccard/apply',data)
 }
 function userRed(data) {
   return http.post('/user/userreg', data)
