@@ -139,6 +139,7 @@ export default {
       if(this.searchParams.endDate){
         this.searchParam.endDate = this.searchParams.endDate;
       }
+      this.searchParam.token = JSON.parse(localStorage.getItem("userToken").token);
       getLoanList(this.searchParam).then((res) => {
         if (res.data.code === 0) {
           this.tableData = res.data.data;

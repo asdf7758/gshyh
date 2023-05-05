@@ -3,10 +3,6 @@ import store from '../store'
 
 const Login = () => import('../views/Login.vue')
 const Index = () => import('../views/Index.vue')
-// const UserLoan = () => import('../views/userloan/Index.vue')
-// const LoanApplicationForm = () => import('../views/userloan/LoanApplicationForm.vue')
-// const SubmitSuccess = () => import('../views/userloan/SubmitSuccess.vue')
-// const ApplicationDetail = () => import('../views/userloan/ApplicationDetail.vue')
 const Message = () => import('../views/Message.vue')
 const Bill = () => import('../views/Bill.vue')
 const ApplyCard = () => import('../views/ApplyCard.vue')
@@ -111,8 +107,7 @@ const router = createRouter({
       path: '/repayment',
       name: 'repayment',
       component: Repayment
-    },
-    
+    }
     ,
     {
       path: '/message',
@@ -138,12 +133,14 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
     console.log(1111)
+    store.commit('userToken/updateUsername', '15012341234')
     store.dispatch('userToken/info').then((res) => {
       console.log(res);
       if (res.data.code === 0) {  //token校验成功
         next()
-      }
-      else {  //token校验失败
+
+      } else {  //token校验失败
+        // console.log("进来了")
         next('/login')
       }
     })
@@ -151,24 +148,24 @@ router.beforeEach((to, from, next) => {
   else {
     next()
   }
-  if (to.meta.auth) {
-    console.log('全局首位已启动');
-    store.commit('userToken/updateUsername', '15012341234')
-    console.log(111);
-    // store.commit('userToken/updateUsername','15012341234')
-    next()
-    /* store.dispatch('usersToken/info').then((res) => {
-      if (res.data.errcode === 0) { //token校验成功
-        next()
-      }
-      else { //token校验失败
-        next('/login')
-      }
-    }) */
-  }
-  else {
-    next()
-  }
+  // if (to.meta.auth) {
+  //   console.log('全局首位已启动');
+  //   store.commit('userToken/updateUsername', '15012341234')
+  //   console.log(111);
+  //   // store.commit('userToken/updateUsername','15012341234')
+  //   next()
+  //   /* store.dispatch('usersToken/info').then((res) => {
+  //     if (res.data.errcode === 0) { //token校验成功
+  //       next()
+  //     }
+  //     else { //token校验失败
+  //       next('/login')
+  //     }
+  //   }) */
+  // }
+  // else {
+  //   next()
+  // }
 })
 
 

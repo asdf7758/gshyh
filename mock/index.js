@@ -149,7 +149,7 @@ export default [
     },
   },
   {
-    url: '/api/userloan/selectAllByUserId/4',
+    url: '/api/userloan/selectAllByUserId',
     method: 'get',
     response: (req, res) => {
       return {

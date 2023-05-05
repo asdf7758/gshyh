@@ -39,6 +39,10 @@ function fenqi(data){
 
  }
 
+function getUserId(data){
+    return http.get('/user/userselect', data)
+}
+
 
 //申请额度
 
@@ -77,5 +81,6 @@ export {
   login,
   userRed,
   money,
-  fenqi
+  fenqi,
+    getUserId
 }
