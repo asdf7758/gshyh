@@ -12,7 +12,7 @@
         <el-button @click="handConfirm" type="primary" style="float: right;">
             确定选择
         </el-button>
-        <el-dialog v-model="centerDialogVisible" title="收支" width="40%" style="margin-top: 10%;">
+        <el-dialog v-model="centerDialogVisible" title="时间" width="40%" style="margin-top: 10%;">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleTabTime">
                 <el-tab-pane label="月份选择" name="first">
                     <div class="demo-date-picker">
@@ -53,25 +53,26 @@
 
 
         <el-dialog v-model="category" title="类型" width="30%" align-center>
-            <div>
-                <p>收入</p>
-                <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全部收入</el-checkbox>
-                {{ checkedIncome }}
-                <el-checkbox-group v-model="checkedIncome" @change="handleCheckedIncomeChange">
-                    <el-checkbox v-for="income in incomes" :key="income.type" :label="income.type">{{
-                        income.title
-                    }}</el-checkbox>
-                </el-checkbox-group>
-            </div>
-            <div>
-                <p>支出</p>
-                <el-checkbox v-model="spendAll" @change="handleSpendAllChange">全部支出</el-checkbox>
-                <el-checkbox-group v-model="checkedSpends" @change="handleCheckedSpendsChange">
-                    <el-checkbox v-for="spend in spends" :key="spend.type" :label="spend.type">{{
-                        spend.title
-                    }}</el-checkbox>
-                </el-checkbox-group>
-            </div>
+
+            <el-tabs v-model="typeName" class="demo-tabs" @tab-change="handleTabType">
+                <el-tab-pane label="收入" name="1">
+                    <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全部收入</el-checkbox>
+                    {{ checkedIncome }}
+                    <el-checkbox-group v-model="checkedIncome" @change="handleCheckedIncomeChange">
+                        <el-checkbox v-for="income in incomes" :key="income.type" :label="income.type">{{
+                            income.title
+                        }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+                <el-tab-pane label="支出" name="0">
+                    <el-checkbox v-model="spendAll" @change="handleSpendAllChange">全部支出</el-checkbox>
+                    <el-checkbox-group v-model="checkedSpends" @change="handleCheckedSpendsChange">
+                        <el-checkbox v-for="spend in spends" :key="spend.type" :label="spend.type">{{
+                            spend.title
+                        }}</el-checkbox>
+                    </el-checkbox-group>
+                </el-tab-pane>
+            </el-tabs>
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="category = false">Cancel</el-button>
@@ -96,7 +97,7 @@
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="onReset($refs.formRef)">重置</el-button>
-                    <el-button type="primary" @click="onSubmit($refs.formRef)">添加</el-button>
+                    <el-button type="primary" @click="onSubmit($refs.formRef)">确定</el-button>
                 </span>
             </template>
         </el-dialog>
@@ -124,12 +125,12 @@ export default {
             value1: '',
             value2: '',
             dateFlag: '',
-            dayStart:'',
-            dayEnd:'',
-            monthStart:'',
-            monthEnd:'',
-            yearStart:'',
-            yearEnd:'',
+            dayStart: '',
+            dayEnd: '',
+            monthStart: '',
+            monthEnd: '',
+            yearStart: '',
+            yearEnd: '',
             checkedIncome: [20, 21, 22],
             incomes: [
                 { type: 20, title: '薪酬' },
@@ -147,6 +148,10 @@ export default {
             ],
             spendAll: true,
             money: false,
+            billIncome: [0],
+            billPay: [0],
+            billFlag: [],
+            typeName: '1',
             rules: {
             },
             muchMoney: {
@@ -256,22 +261,56 @@ export default {
 
         },
         handConfirm() {
+            if (this.monthStart) {
+                this.monthStart = this.monthStart < 9 ? '' + 0 + this.monthStart : (this.monthStart).toString
+            }
 
+            console.log(this.yearStart, this.monthStart);
         },
         lastMonth() {
             this.dateFlag = '20'
+            this.dayStart = ''
+            this.dayEnd = ''
+            this.monthEnd = ''
+            this.yearEnd = ''
+            var d = new Date()
+            this.yearStart = (d.getFullYear()).toString()
+            this.monthStart = ((d.getMonth() + 1) - 1).toString()
         },
         lastThreeMonths() {
             this.dateFlag = '21'
+            this.dayStart = ''
+            this.dayEnd = ''
+            this.monthEnd = ''
+            this.yearEnd = ''
+            var d = new Date()
+            this.yearStart = (d.getFullYear()).toString()
+            this.monthStart = ((d.getMonth() + 1) - 3).toString()
+            console.log(this.yearStart, this.monthStart);
+
         },
         lastYear() {
             this.dateFlag = '22'
+            this.monthStart = ''
+            this.dayStart = ''
+            this.dayEnd = ''
+            this.monthEnd = ''
+            this.yearEnd = ''
+            var d = new Date()
+            this.yearStart = (d.getFullYear()).toString()
         },
         handleTime() {
             this.centerDialogVisible = false
-            if(this.value1){
+            if (this.value1) {
                 console.log(this.value1);
-                
+                this.dayStart = ''
+                this.dayEnd = ''
+                this.monthEnd = ''
+                this.yearEnd = ''
+                this.yearStart = (parseInt(((this.value1 - 0) / 100))).toString()
+                this.monthStart = ((this.value1 - 0) % 100)
+
+                console.log(this.yearStart, this.monthStart);
             }
             // console.log(parseInt(this.value1))
             // console.log(this.value2);
@@ -287,7 +326,40 @@ export default {
                 console.log(this.activeName);
                 this.value1 = ''
             }
-        }
+        },
+        handleTabType(){
+            if(this.typeName==1){
+                this.billFlag.splice(0,this.billFlag.length,1)
+            }else if(this.typeName==0){
+                this.billFlag.splice(0,this.billFlag.length,0)
+            }
+        },
+        onReset(formEl) {
+            console.log(this.form)
+            formEl.resetFields()
+        },
+        onSubmit(formEl) {
+            if (!formEl) return
+            formEl.validate((valid, fields) => {
+                if (valid) {
+                    console.log('submit!')
+                    // updateShop({ dynamictags: dynamictags.value, username: userTokenStore.username }).then((res) => {
+                    //     if (res.data.errcode === 0) {
+                    //         activeName.value = form.title
+                    //         dialogVisible.value = false
+                    //         this.$refs.formRef.resetFields()
+                    //         ElMessage.success('添加成功')
+                    //     }
+                    //     else {
+                    //         ElMessage.error('添加失败')
+                    //     }
+                    // })
+                } else {
+                    console.log('error submit!', fields)
+                }
+            })
+            this.money = false
+        },
     }
 }
 </script>

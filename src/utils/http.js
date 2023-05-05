@@ -12,7 +12,7 @@ const instance = axios.create({
     // 在发送请求之前做些什么
   
      //设置请求头信息，每个instance发起的请求都会携带用户的信息
-    /* config.headers.token=store.state.users.token */ //把token挂载到请求头上
+     config.headers.token=store.state.userToken.token  //把token挂载到请求头上
     return config;
   }, function (error) {
     // 对请求错误做些什么

@@ -14,7 +14,7 @@
                         <span>请填写本人手机号</span>
                     </el-form-item>
                     <el-form-item label="用户名:" prop="userName">
-                        <el-input class="nav" v-model="form.userName" placeholder="请输入手机号" />
+                        <el-input class="nav" v-model="form.userName" placeholder="请输入用户名" />
                         <span>该用户名将作为登录名</span>
                     </el-form-item>
                     <el-form-item label="身份证号:" prop="userIdCard">
@@ -111,6 +111,7 @@ export default {
                 if (valid) {
                     console.log('submit!')
                     userRed(this.form).then((res) => {
+                        console.log(res);
                         if (res.data.code === 1) {
                             // 添加到状态管理和本地存储中
                             // userTokenStore.updateToken(res.data.token)
@@ -119,7 +120,7 @@ export default {
                             // this.$store.commit('usersToken/updateToken',res.data.token)
                         }
                         else {
-                            ElMessage.error('登录失败')
+                            ElMessage.error('注册失败')
                         }
                     })
                 } else {

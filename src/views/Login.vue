@@ -81,13 +81,15 @@ export default {
         if (valid) {
           console.log('submit!')
           login(this.form).then((res) => {
-            console.log(res.data.code);
+            console.log(res);
             if (res.data.code === 0) {
               // 添加到状态管理和本地存储中
               // userTokenStore.updateToken(res.data.token)
+              console.log(res.data.data);
               ElMessage.success('登录成功')
               this.$router.push('/')
-              // this.$store.commit('usersToken/updateToken',res.data.token)
+              // localStorage.setItem('token',auth )
+               this.$store.commit('userToken/updateToken',res.data.data)
             }
             else {
               ElMessage.error('登录失败')
@@ -162,7 +164,7 @@ export default {
 .el-main {
   overflow: hidden;
 }
-
+ 
 .el-form {
   display: inline-block;
   width: 24.375rem;
