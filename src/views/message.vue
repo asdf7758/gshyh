@@ -40,24 +40,34 @@
                     <template #extra>
                         <el-button type="primary" icon="Edit" @click="handleDialog">修改个人信息</el-button>
                     </template>
-                    <el-descriptions-item label="姓名">小轩轩</el-descriptions-item>
-                    <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
-                    <el-descriptions-item label="卡号" >6225123456788</el-descriptions-item>
-                    <el-descriptions-item label="性别" >女</el-descriptions-item>
-                    <el-descriptions-item label="身份证号" >410102200010072389</el-descriptions-item>
-                    <el-descriptions-item label="出生年月日" >2000-10-07</el-descriptions-item>
-                    <el-descriptions-item label="地址">
-                        辽宁省大连市高新园区
-                    </el-descriptions-item>
+                    <el-descriptions-item label="姓名">{{tableData.userRealName}}</el-descriptions-item>
+                    <el-descriptions-item label="手机号">{{tableData.userPhone}}</el-descriptions-item>
+                    <el-descriptions-item label="卡号" >{{tableData.bankCardId}}</el-descriptions-item>
+                    <el-descriptions-item label="性别" >{{tableData.userSex}}</el-descriptions-item>
+                    <el-descriptions-item label="身份证号" >{{tableData.userIdCard}}</el-descriptions-item>
+                    <el-descriptions-item label="出生年月日" >{{tableData.userBirthday}}</el-descriptions-item>
                 </el-descriptions>
                 <el-dialog v-model="dialogVisible" title="提示" width="500">
                     <span class="perInfo">其他信息根据用户实名获取，如需更改，请拿身份证自行到银行办理</span>
                     <el-form :model="form" :rules="rules" ref="formRef" label-width="90px" status-icon>
+                        <el-form-item label="姓名" prop="userRealName">
+                            <el-input v-model="form.userRealName"/>
+                        </el-form-item>
                         <el-form-item label="手机号" prop="userPhone">
                             <el-input v-model="form.userPhone"/>
                         </el-form-item>
-                        <el-form-item label="地址" prop="jobAddress">
-                            <el-input  type="textarea" v-model="form.jobAddress" :rows="4" />
+                        <el-form-item label="卡号" prop="bankCardId">
+                            <el-input v-model="form.bankCardId"/>
+                        </el-form-item>
+                        <el-form-item label="性别" prop="userSex">
+                            <el-input v-model="form.userSex"/>
+                        </el-form-item>
+                        <el-form-item label="身份证号" prop="userIdCard">
+                            <el-input v-model="form.userIdCard"/>
+                        </el-form-item>
+                        <el-form-item label="出生年月日" prop="value1">
+                            <el-date-picker v-model="form.value1" type="dates" placeholder="选择时间" format="YYYY/MM/DD"
+                                value-format="YYYYMMDD" />
                         </el-form-item>
                     </el-form>
                     <template #footer>
@@ -80,29 +90,39 @@
 </template>
 
 <script>
+import { getPerson, updatePerson } from '../api/person'
 export default {
     data() {
         return {
             tableData: [
-                {
-                    userId: 1,
-                    bankCardId: '6225123456788',
-                    userBirthday:"1998-08-28",
-                    userRealName: '小轩轩',
-                    userSex: '女',
-                    userPhone: '13612341234',
-                    userIdCard: '410102200010072389',
-                    address: '辽宁省沈阳市',
-                },
+                // {
+                //     userId: 1,
+                //     bankCardId: '6225123456788',
+                //     userBirthday:"1998-08-28",
+                //     userRealName: '小轩轩',
+                //     userSex: '女',
+                //     userPhone: '13612341234',
+                //     userIdCard: '410102200010072389',
+                //     address: '辽宁省沈阳市',
+                // },
             ],
-            form: {
-                userPhone:'',
-                jobAddress:'',
-            },
+            form: [
+                {
+                    userId:'1',
+                    userRealName:'',
+                    userPhone:'',
+                    bankCardId:'',
+                    bankCardId:'',
+                    userSex:'',
+                    userIdCard:'',
+                    value1:''
+                }
+            ],
             dialogVisible: false,
             rules:{
             },
-            tabActive: this.$route.path
+            tabActive: this.$route.path,
+            
         }
     },
     components: {
@@ -124,18 +144,10 @@ export default {
             if (!formEl) return
             formEl.validate((valid, fields) => {
                 if (valid) {
-                    console.log('submit!')
-                    // updateShop({ dynamictags: dynamictags.value, username: userTokenStore.username }).then((res) => {
-                    //     if (res.data.errcode === 0) {
-                    //         activeName.value = form.title
-                    //         dialogVisible.value = false
-                    //         this.$refs.formRef.resetFields()
-                    //         ElMessage.success('添加成功')
-                    //     }
-                    //     else {
-                    //         ElMessage.error('添加失败')
-                    //     }
-                    // })
+                    console.log(this.form)
+                    updatePerson(this.form[0]).then((res)=>{
+                        console.log(res);
+                    })
                 } else {
                     console.log('error submit!', fields)
                 }
@@ -144,8 +156,19 @@ export default {
         },
         hangleBill(res){
             this.$router.push(res.paneName)
+            // localstorage.getItem
         }
-    }
+        
+    },
+    created(){
+    console.log(1111);
+    
+    console.log(this.$store.state.userToken.token);
+    getPerson({s:this.$store.state.userToken.token}).then((res)=>{
+        console.log(res);
+        this.tableData=res.data.data
+    })
+}
 }
 </script>
 
