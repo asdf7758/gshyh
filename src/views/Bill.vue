@@ -126,10 +126,11 @@
 <script>
 import { sendBill, sendBillTotal } from '../api/person'
 import _ from "lodash"//导入整个lodash库
+import { getPerson } from '../api/person'
 export default {
     data() {
         return {
-            userId:'1',
+            userId:'',
             centerDialogVisible: false,
             category: false,
             activeName: 'second',
@@ -315,10 +316,10 @@ export default {
             // bill/userBill/一堆参数
             
             if (this.monthStart) {
-                this.monthStart = this.monthStart < 9 ? '' + 0 + this.monthStart : (this.monthStart).toString
+                this.monthStart = this.monthStart < 9 ? '' + 0 + this.monthStart : (this.monthStart).toString()
             }
             if (this.monthEnd!='0') {
-                this.monthEnd = this.monthEnd < 9 ? '' + 0 + this.monthEnd : (this.monthEnd).toString
+                this.monthEnd = this.monthEnd < 9 ? '' + 0 + this.monthEnd : (this.monthEnd).toString()
             }
             if(this.dayStart){
                 this.dayStart = this.dayStart < 9 ? '' + 0 + this.dayStart : this.dayStart
@@ -336,26 +337,31 @@ export default {
             //     this.billFlag.splice(0, this.billFlag.length, 2)
             // }
             console.log(this.yearStart, this.monthStart, this.yearEnd, this.monthEnd);
-            if(command === "a"){
-                console.log(this.monthEnd,this.dayEnd)
-                const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
-                console.log(all);
-                sendBill(all).then((res)=>{
-                    console.log(res.data.data);
-                    this.tablePageData=res.data.data
-                })
+            console.log(this.userId);
+
+            if(this.userId){
+                if (command === "a") {
+                    console.log(this.monthEnd, this.dayEnd)
+                    const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
+                    console.log(all);
+                    sendBill(all).then((res) => {
+                        console.log(res.data.data);
+                        this.tablePageData = res.data.data
+                    })
+                }
+                if (command == 'b') {
+                    this.billFlagList = this.billFlag
+                    this.billPayList = this.checkedSpends
+                    this.billIncomeList = this.checkedIncome
+                    const all = `${this.userId}/${this.billFlagList}/${this.billPayList}/${this.billIncomeList}/${this.muchMoney.minMoney}/${this.muchMoney.maxMoney}`
+                    console.log(all);
+                    sendBillTotal(all).then((res) => {
+                        console.log(res.data.data);
+                        this.tablePageData = res.data.data
+                    })
+                }
             }
-            if(command=='b'){
-                this.billFlagList=this.billFlag
-                this.billPayList=this.checkedSpends
-                this.billIncomeList=this.checkedIncome
-                const all = `${this.userId}/${this.billFlagList}/${this.billPayList}/${this.billIncomeList}/${this.muchMoney.minMoney}/${this.muchMoney.maxMoney}`
-                console.log(all);
-                sendBillTotal(all).then((res)=>{
-                    console.log(res.data.data);
-                    this.tablePageData=res.data.data
-                })
-            }
+            
         },
         onReset(formEl) {
             console.log(this.form)
@@ -386,23 +392,53 @@ export default {
         },
         
     },
-    mounted() {
-        // 等DOM加载后触发的时机
-        const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
+    beforeCreate(){
+        console.log(1111);
+        console.log(this.$store.state.userToken.token);
+        getPerson({ s: this.$store.state.userToken.token }).then((res) => {
+            console.log(res);
+            this.userId = res.data.data.userId.toString()
+            console.log(this.userId);
+            const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
                 console.log(all);
                 sendBill(all).then((res)=>{
+                    console.log(res);
                     console.log(res.data.data);
                     this.tablePageData=res.data.data
                 })
+
+
+        })
     },
+    // mounted() {
+        
+        
+    //     // 等DOM加载后触发的时机
+    //     const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
+    //             console.log(all);
+    //             sendBill(all).then((res)=>{
+    //                 console.log(res);
+    //                 console.log(res.data.data);
+    //                 this.tablePageData=res.data.data
+    //             })
+    // },
+    
     // created() {
     //     console.log(1111);
     //     console.log(this.$store.state.userToken.token);
     //     getPerson({ s: this.$store.state.userToken.token }).then((res) => {
     //         console.log(res);
-    //         this.userId = res.data.data.userId
-
+    //         // this.userId = res.data.data.userId.toString()
+    //         this.userId='1'
+    //         console.log(this.userId);
     //     })
+        
+    //     const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
+    //         console.log(all);
+    //         sendBill(all).then((res)=>{
+    //             console.log(res.data.data);
+    //             this.tablePageData=res.data.data
+    //         })
     // }
 }
 </script>

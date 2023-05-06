@@ -68,8 +68,9 @@
                                     <el-input v-model="form.userIdCard" readonly />
                                 </el-form-item>
                                 <el-form-item label="出生年月日" prop="userBirthday">
-                                    <el-date-picker v-model="form.userBirthday" type="datetime" placeholder="选择时间"
-                                        format="YYYY/MM/DD hh:mm:ss" value-format="YYYY-MM-DD h:m:s a" />
+                                    <!-- <el-date-picker v-model="form.userBirthday" type="datetime" placeholder="选择时间"
+                                        format="YYYY/MM/DD hh:mm:ss" value-format="YYYY-MM-DD h:m:s a" /> -->
+                                        <el-input v-model="form.userBirthday" readonly />
                                 </el-form-item>
                             </el-form>
                             <template #footer>
@@ -176,7 +177,7 @@ export default {
             console.log(res);
             this.tableData = res.data.data
             this.form = res.data.data
-            console.log(res.data.data.userId);
+            // console.log(res.data.data.userId);
         })
     }
 }
