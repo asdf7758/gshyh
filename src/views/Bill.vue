@@ -394,7 +394,16 @@ export default {
                     console.log(res.data.data);
                     this.tablePageData=res.data.data
                 })
-    }
+    },
+    // created() {
+    //     console.log(1111);
+    //     console.log(this.$store.state.userToken.token);
+    //     getPerson({ s: this.$store.state.userToken.token }).then((res) => {
+    //         console.log(res);
+    //         this.userId = res.data.data.userId
+
+    //     })
+    // }
 }
 </script>
 

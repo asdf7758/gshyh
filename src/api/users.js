@@ -40,6 +40,7 @@ function fenqi(data){
  }
 
 function getUserId(data){
+    console.log(data);
     return http.get('/user/userselect', data)
 }
 

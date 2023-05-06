@@ -12,8 +12,8 @@ function getPerson(data){
     return http.get('/user/userselect',data)
 }
 // 更改个人信息
-function updatePerson(data,toke){
-    return http.put('/user/userupdate',data,toke)
+function updatePerson(data){
+    return http.put('/user/userupdate',data)
 }
 
 export{
