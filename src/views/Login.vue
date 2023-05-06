@@ -19,7 +19,7 @@
           </el-form-item>
           <div class="box"> <el-checkbox v-model="checked1" label="记住用户名" size="large" /><a href="#"
               class="forget-password">忘记密码？</a></div>
-          <div class="register">未注册个人网银?<a @click="toRegister" class="register1" href="#">立即注册</a></div>
+          <div class="register">未注册个人网银?<a @click="toRegister" class="register1">立即注册</a></div>
         </el-form>
       </el-main>
       <el-footer>

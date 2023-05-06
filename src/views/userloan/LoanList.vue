@@ -55,17 +55,19 @@
       <el-table-column prop="userLoanRate" label="贷款利率"/>
       <el-table-column prop="userLoanInterest" label="贷款利息"/>
       <el-table-column prop="userLoanMonthPay" label="每期还款"/>
-      <el-table-column prop="status" label="状态"/>
+      <el-table-column prop="payMentStatus" label="状态"/>
     </el-table>
   </div>
 </template>
 
 <script>
-import {getLoanList} from '../../api/loan'
+import {getLoanList,getSiftlist} from '../../api/loan'
+import {getUserId} from "../../api/users";
 
 export default {
   data() {
     return {
+      userId:"",
       tableData: [{
         userLoanId: '',
         userLoanDate: '',
@@ -75,7 +77,7 @@ export default {
         userLoanMonthPay: '',
         userLoanInterest: '',
         userLoanRate: '',
-        status: '',
+        payMentStatus: '',
       }]
       , options: [
         {
@@ -95,14 +97,14 @@ export default {
         userLoanTypeTarget: '',
         month: [],
         userLoanId: '',
-        startDate: '',
-        endDate: ''
+        userLoanDateStart: '',
+        userLoanDateEnd: ''
       },
       searchParam: {
         userLoanTypeTarget: '',
         userLoanId: '',
-        startDate: '',
-        endDate: ''
+        userLoanDateStart: '',
+        userLoanDateEnd: ''
       }
     }
   },
@@ -111,10 +113,15 @@ export default {
       this.$router.push('/loanform')
     },
     getList() {
-      getLoanList().then((res) => {
-        if (res.data.code === 0) {
+      const data = {
+
+      }
+      getLoanList(data,this.userId).then((res) => {
           this.tableData = res.data.data;
-        }
+          this.tableData.forEach(item =>{
+            item.userLoanRate = item.loanRate.loanRateFigure
+          })
+          console.log(this.tableData)
       })
     },
     reset(){
@@ -124,8 +131,8 @@ export default {
     },
     search(){
       if(this.searchParams.month){
-        this.searchParams.startDate = this.searchParams.month[0];
-        this.searchParams.endDate = this.searchParams.month[1];
+        this.searchParams.userLoanDateStart = this.searchParams.month[0];
+        this.searchParams.userLoanDateEnd = this.searchParams.month[1];
       }
       if(this.searchParams.userLoanTypeTarget){
         this.searchParam.userLoanTypeTarget = this.searchParams.userLoanTypeTarget;
@@ -133,22 +140,31 @@ export default {
       if(this.searchParams.userLoanId){
        this.searchParam.userLoanId = this.searchParams.userLoanId;
       }
-      if(this.searchParams.startDate){
-        this.searchParam.startDate = this.searchParams.startDate;
+      if(this.searchParams.userLoanDateStart){
+        this.searchParam.userLoanDateStart = this.searchParams.userLoanDateStart;
       }
-      if(this.searchParams.endDate){
-        this.searchParam.endDate = this.searchParams.endDate;
+      if(this.searchParams.userLoanDateEnd){
+        this.searchParam.userLoanDateEnd = this.searchParams.userLoanDateEnd;
       }
-      this.searchParam.token = JSON.parse(localStorage.getItem("userToken").token);
-      getLoanList(this.searchParam).then((res) => {
-        if (res.data.code === 0) {
+      getSiftlist(this.searchParam,this.userId).then((res) => {
+        console.log(res)
+          res.data.forEach(item =>{
+            item.userLoanRate = item.LoanRate.loanRateFigure
+          })
           this.tableData = res.data.data;
-        }
       })
     }
   },
   mounted() {
-    this.getList();
+    getUserId().then(res =>{
+      if(res.data.data.userId){
+
+        this.userId = res.data.data.userId
+        console.log(this.userId)
+        this.getList();
+      }
+    });
+
   }
 }
 </script>
