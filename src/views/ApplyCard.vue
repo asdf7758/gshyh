@@ -25,10 +25,10 @@
 
                 <ul style="list-style: none;margin-left: 200px;">
                     <li v-for="item, index in list" style="display: inline-block;width: 220px;margin-right: 20px;;;"
-                        :key="item.id">
-                        <img :src="item.image" alt="" style="width: 200px;height: 124px">
-                        <h3> {{ item.title }}</h3>
-                        <p style="font-size: 13px;">{{ item.content }}</p>
+                        :key="item.creditCardTypeid">
+                        <img :src="item.creditCardImg" alt="" style="width: 200px;height: 124px">
+                        <h3> {{ item.creditCardName }}</h3>
+                        <p style="font-size: 13px;">{{ item.creditCardContent}}</p>
                         <van-button type="primary" style="margin: left 25px; ;width: 150px;"
                             @click="showInput">立即申请</van-button>
                     </li>
@@ -55,11 +55,11 @@
 
                                 尊贵的：牡丹超惠系列信用卡用户您好！
                             </h3>
-                            <h3> 613***************6511</h3>
+                            <h3> {{greditList.creditCardId }}</h3>
                         </div>
                         </p>
                         <p>
-                            可用额度 <b> ￥{{ greditList.money }} </b> <el-button type="primary" @click="handleCota(11)">申请额度
+                            可用额度 <b> ￥{{ greditList.creditCardBalance }} </b> <el-button type="primary" @click="handleCota(11)">申请额度
 
                                 <el-dialog v-model="dialogVisible33" width="300">
 
@@ -310,7 +310,7 @@ export default {
                 ],
                 yzm: [
                     { required: true, message: '验证码不能为空', trigger: 'blur' },
-                    { min: 4, max: 4, message: '四位验证码', trigger: 'blur' },
+                    { min: 6, max: 6, message: '六位验证码', trigger: 'blur' },
                 ]
 
 
@@ -369,7 +369,7 @@ export default {
             }, 1000)
             console.log(111);
             sendYzm().then((res) => {
-                console.log(res.data)
+                console.log(res.data.data)
             })
             if (!this.name) {
                 return;
@@ -460,12 +460,18 @@ export default {
             if (!formEl) return
             formEl.validate((valid, fields) => {
                 if (valid) {
-                    console.log(111);
-                    applycota(this.formCota, this.username).then((res) => {
-                        if (res.data.code === 0) {
+                    const data={ money:this.formCota.summoney, ccardId:this.greditList.creditCardId}
+                    console.log(data);
+                    applycota(data).then((res) => {
+                    console.log(this.greditList.creditCardId);
+                  
+                        console.log(res);
+                        if (res.data.code === 0) {                        
                             ElMessage.success('申请额度成功')
                             this.dialogVisible33 = false
                             this.$refs.formRef2.resetFields()
+
+
                         }
                     })
 
@@ -480,21 +486,25 @@ export default {
         this.username = store.state.userToken.username
 
     },
+ 
 
     created() {
         apply().then((res) => {
 
-            console.log(res);
+            console.log( '申请的数据', res.data.data);
             if (res.data.code === 0) {
-                this.list = res.data.applycard
+                this.list = res.data.data
             }
         }),
-            greditcard().then((res) => {
+        greditcard().then((res) => {
+                console.log(res);
                 if (res.data.code === 0) {
-                    this.greditList = res.data
-                    this.billsearch = this.greditList.billsearch
+                    
+                    this.greditList = res.data.data
+                    // this.billsearch = this.greditList.billsearch
                 }
             })
+            
     }
 }
 </script>

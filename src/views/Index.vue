@@ -57,7 +57,7 @@
 
                     <el-sub-menu index="1">
                         <template #title>账户服务</template>
-                        <el-menu-item index="2-1">item one</el-menu-item>
+                        <el-menu-item index="2-1" @click="handleGetmoney">申请取款</el-menu-item>
                         <el-menu-item index="2-2">item two</el-menu-item>
                         <el-menu-item index="2-3">item three</el-menu-item>
                         <el-menu-item index="2-4">item three</el-menu-item>
@@ -228,9 +228,13 @@ export default {
         handleBill(){
             this.$router.push('/message/bill')
         },
+        handleGetmoney(){
+            this.$router.push('/getmoney')
+        },
         handleClose(){
            //清楚token   跳转登录页
            this.$router.push('/login')
+          localStorage.removeItem("vuex");
            
         },
         handleClsose() {
