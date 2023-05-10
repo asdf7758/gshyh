@@ -137,7 +137,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
-    console.log(1111)
+
     store.dispatch('userToken/info').then((res) => {
       console.log(res);
       if (res.data.code === 0) {  //token校验成功
@@ -151,24 +151,7 @@ router.beforeEach((to, from, next) => {
   else {
     next()
   }
-  if (to.meta.auth) {
-    console.log('全局首位已启动');
-    store.commit('userToken/updateUsername', '15012341234')
-    console.log(111);
-    // store.commit('userToken/updateUsername','15012341234')
-    next()
-    /* store.dispatch('usersToken/info').then((res) => {
-      if (res.data.errcode === 0) { //token校验成功
-        next()
-      }
-      else { //token校验失败
-        next('/login')
-      }
-    }) */
-  }
-  else {
-    next()
-  }
+
 })
 
 

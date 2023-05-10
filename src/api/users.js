@@ -35,7 +35,7 @@ function fenqi(data){
  // 信用卡还款
 
  function  payMoney(data){
-  return http.post('/pay/money',data)
+  return http.post('/ccard/repay',data)
 
  }
 
@@ -47,6 +47,9 @@ function fenqi(data){
  }
 
 
+ function ccardBill(data){
+  return http.post('/ccard/bill',data)
+ }
 //提交信用卡信息
 function submitCard(data) {              
   return http.post('/ccard/apply',data)
@@ -77,5 +80,6 @@ export {
   login,
   userRed,
   money,
-  fenqi
+  fenqi,
+  ccardBill
 }

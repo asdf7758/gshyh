@@ -88,16 +88,15 @@
                 </div>
 
                 <hr>
-                <ul style="margin-top: 30px  ;">
-                    <li v-for="item, index in billsearch" :key="item.id"
+                <ul style="margin-top: 30px  ;" v-if="isShow11">
+                    <li 
                         style="border-bottom: 1px solid  #ccc;width: 700px;margin: 0 auto;margin-top: 10px  ;">
-                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 待还金额：{{ item.meta }}
+                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 待还金额：{{ greditList.cardTotalPaymoney }}
                         </span>
-                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 还款日： {{ item.date }}
+                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 还款日： {{ greditList.cardRepaymentTime }}
                         </span>
                         <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> {{ zuiDi }} {{
-                            item.zdMeta
-                        }} </span>
+                            greditList.cardMinPayMoney  }} </span>
                         <el-button type="primary" @click="handleGredit(index)">立即还款 </el-button>
 
 
@@ -106,13 +105,13 @@
                     <el-dialog v-model="dialogVisible22" width="300">
                         <h3 style="text-align: center;">还款金额</h3>
                         <el-form :model="formStill" :rules="rules1" label-width="" ref="formRef1" status-icon>
-                            <el-form-item label="" prop="sum">
-                                <el-input v-model="formStill.sum" placeholder="请输入还款金额" style="width: 220px; " />
+                            <el-form-item label="" prop="money">
+                                <el-input v-model="formStill.money" placeholder="请输入还款金额" style="width: 220px; " />
                             </el-form-item>
-
+         
 
                             <el-form-item label="">
-                                <el-select v-model="formStill.type" placeholder="请选择支付方式" prop="type">
+                                <el-select v-model="formStill.method" placeholder="请选择支付方式" prop="method">
                                     <el-option label="微信" value="微信" />
                                     <el-option label="支付宝" value="支付宝" />
                                     <el-option label="工商银行" value="工商银行" />
@@ -120,8 +119,8 @@
                                     <el-option label="建设银行" value="建设银行" />
                                 </el-select>
 
-                                <el-form-item label="" prop="password">
-                                    <el-input v-model="formStill.password" placeholder="请输入密码" style="width: 220px; " />
+                                <el-form-item label="" prop="pwd">
+                                    <el-input v-model="formStill.pwd" placeholder="请输入密码" style="width: 220px; " />
                                 </el-form-item>
 
                                 <el-button type="primary" @click="handleSubmitStill($refs.formRef1)"
@@ -131,7 +130,7 @@
                     </el-dialog>
                 </ul>
             </el-tab-pane>
-            <el-tab-pane label="历史账单" name="five">
+            <el-tab-pane label="历史账单" name="five"  @click="handleccardBill">
 
             </el-tab-pane>
         </el-tabs>
@@ -253,7 +252,7 @@
 
 <script>
 
-import { apply, submitCard, sendYzm, greditcard, payMoney, applycota, fenqi } from '../api/users'
+import { apply, submitCard, sendYzm, greditcard, payMoney, applycota, fenqi ,ccardBill} from '../api/users'
 import { ElMessage } from 'element-plus'
 import store from '../store'
 
@@ -269,6 +268,7 @@ export default {
             dialogVisible22: false,
             dialogVisible33: false,
             disYzm: false,
+            isShow11:true,
             username: '',
             zuiDi:'最低还款',
             value: '',
@@ -288,10 +288,11 @@ export default {
                 telePhone: '',
                 yzm: '',
             },
+      
             formStill: {
-                sum: '',
-                type: '',
-                password: ''
+                money: '',
+                method: '',
+                pwd: ''
             },
             formCota: {
                 summoney: ''
@@ -320,18 +321,21 @@ export default {
 
 
             rules1: {
-                sum: [
+                money: [
                     { required: true, message: '还款金额不能为空', trigger: 'blur' },
                 ],
-                type: [
+                method: [
                     { required: true, message: '请选择支付方式', trigger: 'change' },
                 ],
-                password: [
+                pwd: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
                     { min: 4, max: 16, message: '4-16位验证码', trigger: 'blur' },
                 ],
 
             },
+
+
+
             rules2: {
                 summoney: [
                     { required: true, message: '申请金额不能为空', trigger: 'blur' },
@@ -354,6 +358,9 @@ export default {
         },
         handleClsose() {
             this.dialogVisible11 = false
+        },
+        handleccardBill(){
+            console.log(111);
         },
         handleSendYzm() {
             let count = 10
@@ -381,6 +388,7 @@ export default {
         },
 
         //还款
+
         handleSubmitStill(formEl, index) {
 
 
@@ -388,12 +396,22 @@ export default {
             formEl.validate((valid, fields) => {
                 if (valid) {
                     console.log(111);
-                    payMoney([this.formStill, this.id, this.username]).then((res) => {
+                    payMoney({...this.formStill,ccardId:this.greditList.creditCardId }).then((res) => {
+                        console.log(res);
                         if (res.data.code === 0) {
                             ElMessage.success('提交成功')
                             this.$refs.formRef1.resetFields()
                             this.dialogVisible22 = false
-                            this.billsearch.splice(index, 1)
+                           if( res.data.data.cardTotalPaymoney ===0){
+                           this.isShow11=false
+                          
+                           }
+                         
+
+                           
+
+
+
                         }
                     })
                 } else {
@@ -470,6 +488,11 @@ export default {
                             ElMessage.success('申请额度成功')
                             this.dialogVisible33 = false
                             this.$refs.formRef2.resetFields()
+                            if( res.data.data.cardTotalPaymoney ===0){
+                           this.isShow11=false                          
+                           }else{
+                            this.isShow11=true 
+                           }
 
 
                         }
@@ -482,6 +505,16 @@ export default {
             )
         }
     },
+
+    updated( ){
+         const data= this.greditList.creditCardId
+         console.log({ ccardId: data});
+        ccardBill({ ccardId: data}).then((res)=>{
+                   console.log(res);
+            })
+    },
+
+
     computed() {
         this.username = store.state.userToken.username
 
@@ -491,20 +524,26 @@ export default {
     created() {
         apply().then((res) => {
 
-            console.log( '申请的数据', res.data.data);
+          
             if (res.data.code === 0) {
                 this.list = res.data.data
             }
         }),
         greditcard().then((res) => {
-                console.log(res);
+               
                 if (res.data.code === 0) {
                     
                     this.greditList = res.data.data
-                    // this.billsearch = this.greditList.billsearch
+                    if( this.greditList.cardTotalPaymoney ===0){
+                           this.isShow11=false
+                            // console.log(this.greditList);
+                           }                   
                 }
             })
+          
             
+
+
     }
 }
 </script>
