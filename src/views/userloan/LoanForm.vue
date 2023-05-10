@@ -77,7 +77,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="每期还款" prop="userLoanMonthPay">
-            <el-input v-model="formData.userLoanMonthPay" placeholder="请输入月供" :disabled='true' clearable
+            <el-input v-model="formData.userLoanMonthPay" type="Number" placeholder="请输入月供" :disabled='true' clearable
                       :style="{width: '100%'}"></el-input>
           </el-form-item>
         </el-col>
@@ -100,6 +100,7 @@
 
 <script>
 import {calculate,addLoanInfo} from '../../api/loan'
+import {getUserId} from "../../api/users";
 export default {
   components: {},
   props: [],
@@ -116,6 +117,8 @@ export default {
         userLoanRate: '',
         userLoanMonthPay: '',
         userLoanInterest: '',
+        userId: '',
+        loanRateId: ''
       },
       rules: {
         userLoanAmount: [{
@@ -196,7 +199,7 @@ export default {
     ["formData.userLoanTypeTarget"]: {
       handler(val) {
         // ...
-        debugger
+        // debugger
         if (val){
           this.monthDisable = false;
           if(val === "消费者贷款"){
@@ -237,9 +240,17 @@ export default {
     }
   },
   created() {},
-  mounted() {},
+  mounted() {
+    getUserId().then(res =>{
+      if(res.data.data.userId){
+        this.formData.userId = res.data.data.userId
+        console.log(this.formData.userId)
+      }
+    });
+  },
   methods: {
     calculate(){
+      this.formData.userLoanMonth =  Number(this.formData.userLoanMonth);
       calculate(this.formData).then((res) => {
         if (res.data.code === 0) {
           // debugger
@@ -248,11 +259,12 @@ export default {
           // 每期还款
           this.formData.userLoanMonthPay = res.data.data.userLoanMonthPay;
           // 贷款利率
-          this.formData.userLoanRate = res.data.data.userLoanRate;
+          this.formData.userLoanRate = res.data.data.loanRate.loanRateFigure;
+          this.formData.loanRateId = res.data.data.loanRate.loanRateId
           this.$message.success("计算成功");
 
         }else if(res.data.code === -1){
-          this.$message.warning(res.data);
+          this.$message.warning(res.data.msg);
         }
       })
     },
@@ -266,7 +278,6 @@ export default {
         }).catch((e)=>{
           this.$message.error(e);
         })
-
       })
     },
     resetForm() {

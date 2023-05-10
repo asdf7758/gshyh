@@ -234,8 +234,7 @@ export default {
         handleClose(){
            //清楚token   跳转登录页
            this.$router.push('/login')
-        // userTokenStore.clearToken()
-
+          localStorage.removeItem("vuex");
            
         },
         handleClsose() {

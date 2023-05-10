@@ -9,16 +9,25 @@
         <el-button @click="money = true" type="primary">
             金额区间
         </el-button>
-        <el-button @click="handConfirm" type="primary" style="float: right;">
-            确定选择
-        </el-button>
+        <el-dropdown @command="handleCommand" style="float: right;">
+            <span class="el-dropdown-link">
+                Dropdown List<el-icon class="el-icon--right"><arrow-down /></el-icon>
+            </span>
+            <template #dropdown>
+                <el-dropdown-menu>
+                    <el-dropdown-item command="a">收支明细</el-dropdown-item>
+                    <el-dropdown-item command="b">快捷筛选</el-dropdown-item>
+                </el-dropdown-menu>
+            </template>
+        </el-dropdown>
+        
         <el-dialog v-model="centerDialogVisible" title="时间" width="40%" style="margin-top: 10%;">
-            <el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleTabTime">
+            <el-tabs v-model="activeName" class="demo-tabs">
                 <el-tab-pane label="月份选择" name="first">
                     <div class="demo-date-picker">
                         <div class="block">
                             <span class="demonstration">Month</span>
-                            <el-date-picker v-model="value1" type="month" placeholder="Pick a month" format="YYYY/MM"
+                            <el-date-picker v-model="value1" type="month" placeholder="选择月份" format="YYYY/MM"
                                 value-format="YYYYMM" />
                         </div>
                     </div>
@@ -35,7 +44,7 @@
                         <div class="block" style="margin-left: 0;">
                             <el-date-picker v-model="value2" type="daterange" unlink-panels range-separator="To"
                                 start-placeholder="Start date" end-placeholder="End date" format="YYYY/MM/DD"
-                                value-format="YYYYMM" />
+                                value-format="YYYYMMDD" />
                         </div>
                     </div>
                 </el-tab-pane>
@@ -54,7 +63,7 @@
 
         <el-dialog v-model="category" title="类型" width="30%" align-center>
 
-            <el-tabs v-model="typeName" class="demo-tabs" @tab-change="handleTabType">
+            <el-tabs v-model="typeName" class="demo-tabs">
                 <el-tab-pane label="收入" name="1">
                     <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全部收入</el-checkbox>
                     {{ checkedIncome }}
@@ -76,7 +85,7 @@
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="category = false">Cancel</el-button>
-                    <el-button type="primary" @click="category = false">
+                    <el-button type="primary" @click="handleType">
                         Confirm
                     </el-button>
                 </span>
@@ -103,7 +112,7 @@
         </el-dialog>
         <el-table :data="tablePageData" border stripe style="width: 100%">
             <el-table-column prop="billBalance" label="账单余额记录" />
-            <el-table-column prop="billData" label="交易时间" />
+            <el-table-column prop="billDate" label="交易时间" />
             <el-table-column prop="billFlag" label="消费类型" />
             <el-table-column prop="billId" label="账单号" />
             <el-table-column prop="billIncome" label="收入" />
@@ -116,21 +125,25 @@
 
 <script>
 import { sendBill, sendBillTotal } from '../api/person'
+import _ from "lodash"//导入整个lodash库
+import { getPerson } from '../api/person'
 export default {
     data() {
         return {
+            userId:'',
             centerDialogVisible: false,
             category: false,
             activeName: 'second',
+            command:'',
             value1: '',
             value2: '',
-            dateFlag: '',
-            dayStart: '',
-            dayEnd: '',
-            monthStart: '',
-            monthEnd: '',
-            yearStart: '',
-            yearEnd: '',
+            dateFlag: '0',
+            dayStart: '0',
+            dayEnd: '0',
+            monthStart: '0',
+            monthEnd: '0',
+            yearStart: '0',
+            yearEnd: '0',
             checkedIncome: [20, 21, 22],
             incomes: [
                 { type: 20, title: '薪酬' },
@@ -150,78 +163,20 @@ export default {
             money: false,
             billIncome: [0],
             billPay: [0],
-            billFlag: [],
+            billFlag: [0],
             typeName: '1',
             rules: {
             },
             muchMoney: {
-                minMoney: '',
-                maxMoney: ''
+                minMoney: '0',
+                maxMoney: '0'
             },
             smallDialog: '',
             bigDialog: '',
-            tablePageData: [
-                {
-                    billBalance: '+500',
-                    billData: '2016-05-03 12:30',
-                    billFlag: '1-支出',
-                    billId: 1,
-                    billIncome: '20',
-                    billMemo: '大连设计城9-1',
-                    billMoney: '4500',
-                    billPay: 10
-                },
-                {
-                    billBalance: '+500',
-                    billData: '2016-05-03 12:30',
-                    billFlag: '1-支出',
-                    billId: 1,
-                    billIncome: '20',
-                    billMemo: '大连设计城9-1',
-                    billMoney: '4500',
-                    billPay: 10
-                },
-                {
-                    billBalance: '+500',
-                    billData: '2016-05-03 12:30',
-                    billFlag: '1-支出',
-                    billId: 1,
-                    billIncome: '20',
-                    billMemo: '大连设计城9-1',
-                    billMoney: '4500',
-                    billPay: 10
-                },
-                {
-                    billBalance: '+500',
-                    billData: '2016-05-03 12:30',
-                    billFlag: '1-支出',
-                    billId: 1,
-                    billIncome: '20',
-                    billMemo: '大连设计城9-1',
-                    billMoney: '4500',
-                    billPay: 10
-                },
-                {
-                    billBalance: '+500',
-                    billData: '2016-05-03 12:30',
-                    billFlag: '1-支出',
-                    billId: 1,
-                    billIncome: '20',
-                    billMemo: '大连设计城9-1',
-                    billMoney: '4500',
-                    billPay: 10
-                },
-                {
-                    billBalance: '+500',
-                    billData: '2016-05-03 12:30',
-                    billFlag: '1-支出',
-                    billId: 1,
-                    billIncome: '20',
-                    billMemo: '大连设计城9-1',
-                    billMoney: '4500',
-                    billPay: 10
-                }
-            ]
+            tablePageData: [],
+            billFlagList:[0],
+            billPayList:[0],
+            billIncomeList:[0],
         }
     },
     methods: {
@@ -259,80 +214,154 @@ export default {
                 this.bigDialog = '输入错误，请重新输入'
             }
 
-        },
+        },/* 
         handConfirm() {
             if (this.monthStart) {
                 this.monthStart = this.monthStart < 9 ? '' + 0 + this.monthStart : (this.monthStart).toString
             }
+            if (this.monthEnd!='0') {
+                this.monthEnd = this.monthEnd < 9 ? '' + 0 + this.monthEnd : (this.monthEnd).toString
+            }
+            if(this.monthEnd=='0'){
+                this.monthEnd='0'
+            }
+            console.log(this.yearStart, this.monthStart, this.yearEnd, this.monthEnd);
 
-            console.log(this.yearStart, this.monthStart);
-        },
+        }, */
         lastMonth() {
             this.dateFlag = '20'
-            this.dayStart = ''
-            this.dayEnd = ''
-            this.monthEnd = ''
-            this.yearEnd = ''
+            this.dayStart = '0'
+            this.dayEnd = '0'
+            this.monthEnd = '0'
+            this.yearEnd = '0'
             var d = new Date()
             this.yearStart = (d.getFullYear()).toString()
-            this.monthStart = ((d.getMonth() + 1) - 1).toString()
+            this.monthStart = ((d.getMonth() + 1) - 1)
         },
         lastThreeMonths() {
             this.dateFlag = '21'
-            this.dayStart = ''
-            this.dayEnd = ''
-            this.monthEnd = ''
-            this.yearEnd = ''
+            this.dayStart = '0'
+            this.dayEnd = '0'
+            this.monthEnd = '0'
+            this.yearEnd = '0'
             var d = new Date()
             this.yearStart = (d.getFullYear()).toString()
-            this.monthStart = ((d.getMonth() + 1) - 3).toString()
+            this.monthStart = ((d.getMonth() + 1) - 3)
             console.log(this.yearStart, this.monthStart);
 
         },
         lastYear() {
             this.dateFlag = '22'
-            this.monthStart = ''
-            this.dayStart = ''
-            this.dayEnd = ''
-            this.monthEnd = ''
-            this.yearEnd = ''
+            this.monthStart = '0'
+            this.dayStart = '0'
+            this.dayEnd = '0'
+            this.monthEnd = '0'
+            this.yearEnd = '0'
             var d = new Date()
             this.yearStart = (d.getFullYear()).toString()
         },
         handleTime() {
             this.centerDialogVisible = false
-            if (this.value1) {
+            if (this.activeName == 'first') {
+                console.log(this.activeName);
                 console.log(this.value1);
-                this.dayStart = ''
-                this.dayEnd = ''
-                this.monthEnd = ''
-                this.yearEnd = ''
-                this.yearStart = (parseInt(((this.value1 - 0) / 100))).toString()
-                this.monthStart = ((this.value1 - 0) % 100)
-
-                console.log(this.yearStart, this.monthStart);
+                this.dateFlag = '10'
+                this.value2 = ''
+                if (this.value1) {
+                    console.log(this.value1);
+                    this.dayStart = '0'
+                    this.dayEnd = '0'
+                    this.monthEnd = '0'
+                    this.yearEnd = '0'
+                    this.yearStart = (parseInt(((this.value1 - 0) / 100))).toString()
+                    this.monthStart = ((this.value1 - 0) % 100)
+                    console.log(this.yearStart, this.monthStart);
+                }
+                return
+            } else if (this.activeName == 'second') {
+                console.log(this.activeName);
+                this.value1 = ''
+                if (this.value2) {
+                    console.log(this.value2, this.value2[0]);
+                    this.dayStart = ((this.value2[0] - 0) % 100).toString()
+                    console.log("this.dayStart",this.dayStart);
+                    this.dayEnd = ((this.value2[1] - 0) % 100).toString()
+                    this.monthEnd = parseInt((this.value2[1] - 0) % 10000/100)
+                    this.yearEnd = (parseInt(((this.value2[1] - 0) / 10000))).toString()
+                    this.yearStart = (parseInt(((this.value2[0] - 0) / 10000))).toString()
+                    this.monthStart = parseInt((this.value2[0] - 0) % 10000/100)
+                    this.dateFlag=30
+                    console.log(this.yearStart, this.monthStart, this.yearEnd, this.monthEnd,this.dayStart,this.dayEnd);
+                }
             }
+
             // console.log(parseInt(this.value1))
             // console.log(this.value2);
             // console.log(this.dateFlag);
         },
-        handleTabTime() {
-            if (this.activeName = 'first') {
-                console.log(this.activeName);
-                this.dateFlag = '10'
-                this.value2 = ''
-                return
-            } else if (this.activeName = 'second') {
-                console.log(this.activeName);
-                this.value1 = ''
+        handleType() {
+            this.category = false
+            if(_.isEqual(this.checkedIncome,[20, 21, 22])&&_.isEqual(this.checkedSpends,[10, 11, 12, 13, 14])){
+                this.billFlag.splice(0, this.billFlag.length, 1,2)
+                
+            }else if(_.isEqual(this.checkedIncome,[20, 21, 22])&&!(_.isEqual(this.checkedSpends,[10, 11, 12, 13, 14]))){
+                this.billFlag.splice(0, this.billFlag.length, 1)
+            }else if(!(_.isEqual(this.checkedIncome,[20, 21, 22]))&&_.isEqual(this.checkedSpends,[10, 11, 12, 13, 14])){
+                this.billFlag.splice(0, this.billFlag.length, 2)
             }
+            // console.log(this.billFlag,this.checkedIncome,this.checkedSpends);
         },
-        handleTabType(){
-            if(this.typeName==1){
-                this.billFlag.splice(0,this.billFlag.length,1)
-            }else if(this.typeName==0){
-                this.billFlag.splice(0,this.billFlag.length,0)
+        //ajax请求
+        handleCommand(command){
+            // bill/userBill/一堆参数
+            
+            if (this.monthStart) {
+                this.monthStart = this.monthStart < 9 ? '' + 0 + this.monthStart : (this.monthStart).toString()
             }
+            if (this.monthEnd!='0') {
+                this.monthEnd = this.monthEnd < 9 ? '' + 0 + this.monthEnd : (this.monthEnd).toString()
+            }
+            if(this.dayStart){
+                this.dayStart = this.dayStart < 9 ? '' + 0 + this.dayStart : this.dayStart
+            }
+            if (this.dayEnd!='0') {
+                this.dayEnd = this.dayEnd < 9 ? '' + 0 + this.dayEnd : this.dayEnd
+            }
+            // if(this.checkedIncome==[20, 21, 22]&&this.checkedIncome==[10, 11, 12, 13, 14]){
+            //     this.billFlag.splice(0, this.billFlag.length, 1,2)
+            //     console.log(this.billFlag.splice(0, this.billFlag.length, 1,2));
+            //     // this.billFlag=[1,2]
+            // }else if(this.checkedIncome==[20, 21, 22]&&this.checkedSpends!=[10, 11, 12, 13, 14]){
+            //     this.billFlag.splice(0, this.billFlag.length, 1)
+            // }else if(this.checkedIncome!=[20, 21, 22]&&this.checkedSpends==[10, 11, 12, 13, 14]){
+            //     this.billFlag.splice(0, this.billFlag.length, 2)
+            // }
+            console.log(this.yearStart, this.monthStart, this.yearEnd, this.monthEnd);
+            console.log(this.userId);
+
+            if(this.userId){
+                if (command === "a") {
+                    console.log(this.monthEnd, this.dayEnd)
+                    const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
+                    console.log(all);
+                    sendBill(all).then((res) => {
+                        console.log(res.data.data);
+                        this.tablePageData = res.data.data
+                    })
+                }
+                if (command == 'b') {
+                    this.billFlagList = this.billFlag
+                    this.billPayList = this.checkedSpends
+                    this.billIncomeList = this.checkedIncome
+                    const all = `${this.userId}/${this.billFlagList}/${this.billPayList}/${this.billIncomeList}/${this.muchMoney.minMoney}/${this.muchMoney.maxMoney}`
+                    console.log(all);
+                    sendBillTotal(all).then((res) => {
+                        console.log(res.data.data);
+                        this.tablePageData = res.data.data
+                    })
+                }
+            }
+            
         },
         onReset(formEl) {
             console.log(this.form)
@@ -354,13 +383,63 @@ export default {
                     //         ElMessage.error('添加失败')
                     //     }
                     // })
+                    console.log(this.muchMoney.minMoney);
                 } else {
                     console.log('error submit!', fields)
                 }
             })
             this.money = false
         },
-    }
+        
+    },
+    beforeCreate(){
+        console.log(1111);
+        console.log(this.$store.state.userToken.token);
+        getPerson({ s: this.$store.state.userToken.token }).then((res) => {
+            console.log(res);
+            this.userId = res.data.data.userId.toString()
+            console.log(this.userId);
+            const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
+                console.log(all);
+                sendBill(all).then((res)=>{
+                    console.log(res);
+                    console.log(res.data.data);
+                    this.tablePageData=res.data.data
+                })
+
+
+        })
+    },
+    // mounted() {
+        
+        
+    //     // 等DOM加载后触发的时机
+    //     const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
+    //             console.log(all);
+    //             sendBill(all).then((res)=>{
+    //                 console.log(res);
+    //                 console.log(res.data.data);
+    //                 this.tablePageData=res.data.data
+    //             })
+    // },
+    
+    // created() {
+    //     console.log(1111);
+    //     console.log(this.$store.state.userToken.token);
+    //     getPerson({ s: this.$store.state.userToken.token }).then((res) => {
+    //         console.log(res);
+    //         // this.userId = res.data.data.userId.toString()
+    //         this.userId='1'
+    //         console.log(this.userId);
+    //     })
+        
+    //     const all = `${this.userId}/${this.billFlag}/${this.dateFlag}/${this.yearStart}/${this.monthStart}/${this.dayStart}/${this.yearEnd}/${this.monthEnd}/${this.dayEnd}`
+    //         console.log(all);
+    //         sendBill(all).then((res)=>{
+    //             console.log(res.data.data);
+    //             this.tablePageData=res.data.data
+    //         })
+    // }
 }
 </script>
 
@@ -395,5 +474,12 @@ export default {
 
 .el-table {
     margin-top: 10px;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: var(--el-color-primary);
+  display: flex;
+  align-items: center;
+  outline: none;
 }
 </style>

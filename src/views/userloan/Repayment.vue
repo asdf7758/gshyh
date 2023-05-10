@@ -4,36 +4,46 @@
     <el-table :data="tableData" stripe style="width: 100%">
       <el-table-column prop="userLoanId" label="贷款编号"/>
       <el-table-column prop="userLoanDate" label="申贷日期"/>
-      <el-table-column prop="{{userLoanAmount + userLoanInterest}}" label="应还总额"/>
       <el-table-column prop="userLoanUnPaid" label="未还总额"/>
-      <el-table-column prop="remainLoanMonth" label="剩余期数"/>
+      <el-table-column prop="userLoanMonthResidue" label="剩余期数"/>
       <el-table-column prop="userLoanMonthPay" label="本期应还"/>
-      <el-table-column prop="status" label="状态"/>
+      <el-table-column prop="payMentStatus" label="状态"/>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button @click="handleEdit()">详情</el-button>
-          <el-button type="primary" @click="handleDelete()">还款</el-button>
+          <el-button type="primary" @click="show(scope.row)">还款</el-button>
         </template>
       </el-table-column>
     </el-table>
   </div>
+
   <el-dialog
-      v-model="dialogVisible"
-      title="还款详情"
-      width="60%"
+      v-model="centerDialogVisible"
+      title="还款"
+      width="80%"
+      align-center
   >
-    <div class="small-box">
-      <p>姓名：{{ userInfo.name }}</p>
-      <p>年龄：{{ userInfo.age }}</p>
-      <p>头衔：{{ userInfo.position }}</p>
-    </div>
+    本期应还：
+    <el-input v-model="formData.userLoanMonthPay" disabled/>
+    未还总额：
+    <el-input v-model="formData.userLoanPay" disabled/>
+    支付密码：
+    <el-input v-model="formData.userPayPwd" placeholder="请输入密码"/>
+
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="centerDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="payload()">
+          确定
+        </el-button>
+      </span>
+    </template>
   </el-dialog>
 
 </template>
 
 <script>
-import {getRepaymentList} from '../../api/loan'
-
+import {repaymentMoney, getLoanList} from '../../api/loan'
+import {getUserId} from "../../api/users";
 
 export default {
   data() {
@@ -45,35 +55,52 @@ export default {
         userLoanUnPaid: '',
         userLoanMonthPay: '',
         status: '',
+        amount: '',
         remainLoanMonth: '',
         userLoanInterest: ''
       }],
       dialogVisible: false,
-      userInfo: {
-        name: "胡明浩",
-        age: 23,
-        position: "青铜"
-      }
+      centerDialogVisible: false,
+      formData: {
+        userLoanId: "",
+        userId: '',
+        userCardId: "",
+        userLoanPay: '',
+        userPayPwd: ''
+      },
     }
   },
   methods: {
-    handleEdit() {
-      this.dialogVisible = true
-    },
-    handleDelete() {
-    },
     getList() {
-      getRepaymentList().then((res) => {
-        if (res.data.code === 0) {
-          this.tableData = res.data.data;
-        }
+      getLoanList({}, this.formData.userId).then((res) => {
+        this.tableData = res.data.data;
       })
     },
-
-    mounted() {
-      this.getList();
+    show(data) {
+      this.centerDialogVisible = true
+      this.formData.userLoanPay = data.userLoanUnPaid;
+      this.formData.userLoanMonthPay = data.userLoanMonthPay;
+      this.formData.userLoanId = data.userLoanId;
+    },
+    payload() {
+      repaymentMoney(this.formData).then(
+          res => {
+            console.log(res)
+            this.centerDialogVisible = false;
+            this.$message.success(res.msg)
+            this.getList();
+          }
+      )
     }
-
+  }
+  , mounted() {
+    getUserId().then(res => {
+      if (res.data.data.userId) {
+        this.formData.userId = res.data.data.userId
+        this.formData.bankCardId = res.data.data.bankCardId
+        this.getList();
+      }
+    });
   }
 }
 </script>

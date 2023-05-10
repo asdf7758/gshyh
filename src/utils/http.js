@@ -11,8 +11,13 @@ const instance = axios.create({
   instance.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
   
-     //设置请求头信息，每个instance发起的请求都会携带用户的信息
-     config.headers.token=store.state.userToken.token  //把token挂载到请求头上
+     // //设置请求头信息，每个instance发起的请求都会携带用户的信息
+      if((localStorage.getItem("vuex"))){
+          config.headers.token = JSON.parse(localStorage.getItem("vuex")).userToken.token
+      }
+      else {
+          config.headers.token = ""
+      }
     return config;
   }, function (error) {
     // 对请求错误做些什么
