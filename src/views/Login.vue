@@ -12,7 +12,7 @@
             <el-input v-model="form.userName" placeholder="用户名" />
           </el-form-item>
           <el-form-item prop="userPwd">
-            <el-input v-model="form.userPwd" placeholder="请输入密码" />
+            <el-input v-model="form.userPwd" placeholder="请输入密码" type="password"/>
           </el-form-item>
           <el-form-item class="denglu">
             <el-button type="primary" @click="onSubmit($refs.ruleFormRef)">登录</el-button>
@@ -76,6 +76,7 @@ export default {
   },
   methods: {
     onSubmit(formEl) {
+      console.log(123);
       if (!formEl) return
       formEl.validate((valid, fields) => {
         if (valid) {

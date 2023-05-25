@@ -25,7 +25,7 @@ const router = createRouter({
       name: 'index',
       component: Index,
       meta: {
-        auth: false
+        auth: true
       }
     }, {
       path: '/login',

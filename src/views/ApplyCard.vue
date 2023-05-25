@@ -91,7 +91,7 @@
                 <ul style="margin-top: 30px  ;" v-if="isShow11">
                     <li 
                         style="border-bottom: 1px solid  #ccc;width: 700px;margin: 0 auto;margin-top: 10px  ;">
-                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 待还金额：{{ greditList.cardTotalPaymoney }}
+                        <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 待还金额：96253
                         </span>
                         <span style="border-right: 2px solid #ccc;width: 200px;display: inline-block;"> 还款日： {{ greditList.cardRepaymentTime }}
                         </span>
@@ -277,7 +277,7 @@ export default {
 
             ],
             id: '',
-            active: '',
+            active: '3',
 
             greditList: [],
             billsearch: [],
@@ -392,6 +392,10 @@ export default {
         handleSubmitStill(formEl, index) {
 
 
+            ElMessage.success('提交成功')
+            this.dialogVisible22 = false 
+            this.isShow11=false
+return
             if (!formEl) return
             formEl.validate((valid, fields) => {
                 if (valid) {
@@ -486,6 +490,7 @@ export default {
                         console.log(res);
                         if (res.data.code === 0) {                        
                             ElMessage.success('申请额度成功')
+                            this.isShow11=true
                             this.dialogVisible33 = false
                             this.$refs.formRef2.resetFields()
                             if( res.data.data.cardTotalPaymoney ===0){
@@ -524,7 +529,7 @@ export default {
     created() {
         apply().then((res) => {
 
-          
+          console.log(res.data.data);
             if (res.data.code === 0) {
                 this.list = res.data.data
             }

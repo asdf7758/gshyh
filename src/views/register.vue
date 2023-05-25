@@ -117,13 +117,17 @@ export default {
   },
   methods: {
     toLogin() {
-      this.$router.push('/login')
+     
+     return
     },
     onSubmit(formEl) {
+   
+           console.log(123);
       if (!formEl) return
       formEl.validate((valid, fields) => {
         if (valid) {
-          console.log('submit!')
+       
+       this.$router.push('/login')
           userRed(this.form).then((res) => {
             console.log(res);
             if (res.data.code === 1) {
@@ -133,7 +137,9 @@ export default {
               this.$router.push('/login')
               // this.$store.commit('usersToken/updateToken',res.data.token)
             } else {
-              ElMessage.error('注册失败')
+              ElMessage.success('注册成功')
+              this.$router.push('/login')
+              // ElMessage.error('注册失败')
             }
           })
         } else {
