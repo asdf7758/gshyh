@@ -126,7 +126,7 @@ export default {
       if (!formEl) return
       formEl.validate((valid, fields) => {
         if (valid) {
-       
+          ElMessage.success('注册成功')
        this.$router.push('/login')
           userRed(this.form).then((res) => {
             console.log(res);
